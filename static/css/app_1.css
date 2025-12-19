@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f6f9;
+}
+
+.topbar {
+  background: #5b2eff;
+  padding: 16px;
+  color: white;
+}
+
+.topbar-inner {
+  display: flex;
+  gap: 12px;
+}
+
+.logo {
+  height: 32px;
+}
+
+.search {
+  flex: 1;
+  padding: 8px;
+  border-radius: 20px;
+  border: none;
+}
+
+.categories a {
+  color: white;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.main-content {
+  padding: 20px;
+}
+
+.cards {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+}
+
+.card {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 220px;
+}

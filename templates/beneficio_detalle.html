@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<a href="javascript:history.back()" class="btn-back">
+  ← Volver
+</a>
+
+<section class="beneficio-detalle-grid">
+
+  <!-- ================= COLUMNA IZQUIERDA ================= -->
+  <div class="beneficio-left">
+
+    <!-- Short description (headline) -->
+    {% if benefit.shortDescription %}
+      <p class="beneficio-short">
+        {{ benefit.shortDescription }}
+      </p>
+    {% endif %}
+
+    <!-- Nombre -->
+    <h1 class="beneficio-title">
+      {{ benefit.name }}
+    </h1>
+
+    <!-- ================= BOTÓN REDIMIR ================= -->
+    {% if benefit.benefitCode %}
+      <a
+        href="{{ url_for('beneficio_redimir', benefit_id=benefit._id) }}?benefitCode={{ benefit.benefitCode }}"
+        class="btn-redimir"
+      >
+        Quiero redimir el beneficio
+      </a>
+    {% else %}
+      <button class="btn-redimir disabled" disabled>
+        Beneficio no redimible
+      </button>
+    {% endif %}
+
+    <!-- Descripción larga -->
+    {% if benefit.description %}
+      <div class="beneficio-description">
+        {{ benefit.description | safe }}
+      </div>
+    {% endif %}
+
+    <!-- Verbatim / Términos -->
+    {% if benefit.listVebatim and benefit.listVebatim|length > 0 %}
+      <div class="beneficio-verbatim">
+        {{ benefit.listVebatim[0].verbatim1 | safe }}
+      </div>
+    {% endif %}
+
+  </div>
+
+  <!-- ================= COLUMNA DERECHA ================= -->
+  <aside class="beneficio-right">
+
+    <!-- Imagen -->
+    {% if benefit.listImages and benefit.listImages|length > 0 %}
+      <img
+        class="beneficio-image"
+        src="{{ benefit.listImages[1].url if benefit.listImages|length > 1 else benefit.listImages[0].url }}"
+        alt="{{ benefit.name }}"
+      >
+    {% endif %}
+
+    <!-- Favorito -->
+    <button class="favorito-detalle" title="Marcar como favorito">
+      ♡ Marcar favorito
+    </button>
+
+    <!-- Way to use -->
+    {% if benefit.wayToUse %}
+      <div class="beneficio-wayto">
+        <h4>Usa este beneficio:</h4>
+
+        <ul>
+          {% if benefit.wayToUse.onsite %}
+            <li>🏬 Tienda física</li>
+          {% endif %}
+          {% if benefit.wayToUse.online %}
+            <li>🌐 Online</li>
+          {% endif %}
+          {% if benefit.wayToUse.whatsapp %}
+            <li>💬 WhatsApp</li>
+          {% endif %}
+          {% if benefit.wayToUse.phone %}
+            <li>📞 Teléfono</li>
+          {% endif %}
+          {% if benefit.wayToUse.email %}
+            <li>✉️ Email</li>
+          {% endif %}
+        </ul>
+      </div>
+    {% endif %}
+
+  </aside>
+
+</section>
+
+{% endblock %}

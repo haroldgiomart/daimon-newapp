@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-container">
+
+  {% for subcategory_id, benefits in benefits_by_subcategory.items() %}
+
+    <div class="section-header">
+      <h2 class="section-title">Beneficios disponibles</h2>
+    </div>
+
+    <div class="benefits-grid">
+      {% for benefit in benefits %}
+        {% include "partials/benefit_card.html" %}
+      {% endfor %}
+    </div>
+
+  {% endfor %}
+
+</div>
+{% endblock %}

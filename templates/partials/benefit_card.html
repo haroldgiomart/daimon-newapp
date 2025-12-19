@@ -1,0 +1,42 @@
+{% set label = "Beneficio" %}
+{% if benefit.benefitType == "CuponStar" %}
+  {% set label = "Cupón" %}
+{% endif %}
+
+<a href="/beneficio/{{ benefit._id }}" class="card-link">
+
+  <div class="card">
+
+    <div class="card-image-wrapper">
+      {% if benefit.listImages and benefit.listImages|length > 0 %}
+        <img
+          src="{{ benefit.listImages[1].url }}"
+          alt="{{ benefit.name }}"
+          loading="lazy"
+        >
+      {% else %}
+        <img
+          src="https://via.placeholder.com/300x200?text=Beneficio"
+          alt="Beneficio"
+        >
+      {% endif %}
+    </div>
+
+    <h3 class="card-title">{{ benefit.name }}</h3>
+
+    {% if benefit.shortDescription %}
+      <p class="card-description">{{ benefit.shortDescription }}</p>
+    {% endif %}
+
+    <div class="card-footer">
+      <div class="card-footer-left">
+        <span class="benefit-tag">{{ label }}</span>
+
+      </div>
+
+      <button class="fav-btn" title="Marcar como favorito">♡</button>
+    </div>
+
+  </div>
+
+</a>

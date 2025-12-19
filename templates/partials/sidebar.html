@@ -1,0 +1,42 @@
+<!-- Overlay -->
+<div
+  x-show="sidebarOpen"
+  x-cloak
+  x-transition.opacity
+  class="overlay"
+  @click="sidebarOpen = false">
+</div>
+
+<!-- Sidebar -->
+<aside
+  class="sidebar"
+  x-show="sidebarOpen"
+  x-cloak
+  x-transition
+  @click.outside="sidebarOpen = false"
+>
+
+  <div class="sidebar-header">
+    <button class="close-btn" @click="sidebarOpen = false">✕</button>
+  </div>
+
+  <div class="sidebar-user">
+    <strong>HG</strong>
+    <div>
+      <p style="margin:0;font-weight:600;">Harold Martinez</p>
+      <small>Beneficiario</small>
+    </div>
+  </div>
+
+  <nav class="sidebar-menu">
+    <a href="/" @click="sidebarOpen = false">Inicio</a>
+    <a href="/beneficios" @click="sidebarOpen = false">Beneficios disponibles</a>
+    <a href="/creditos" @click="sidebarOpen = false">Créditos con Belipp</a>
+    <a href="/tiempo-flexible" @click="sidebarOpen = false">Tiempo flexible</a>
+    <a href="/redenciones" @click="sidebarOpen = false">Beneficios redimidos</a>
+    <a href="/invitar" @click="sidebarOpen = false">Invitar amigos</a>
+    <a href="/preferencias" @click="sidebarOpen = false">Editar mis preferencias</a>
+    <a href="/logout" @click="sidebarOpen = false">Cerrar sesión</a>
+  </nav>
+
+</aside>

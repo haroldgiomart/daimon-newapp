@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+<div class="redeem-success">
+  <div class="success-circle">
+    ✓
+  </div>
+  <p class="success-text">
+    ¡Beneficio redimido con éxito!
+  </p>
+</div>
+
+{% block content %}
+
+
+
+<section class="redeem-wrapper">
+
+  <!-- TEXTO SUPERIOR -->
+  <p class="redeem-title">
+    {{ redeem.texto_sms }}
+  </p>
+
+  <!-- QR CARD -->
+  <div class="redeem-card">
+
+    <img
+      class="redeem-qr"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={{ redeem.codigo }}"
+      alt="Código QR"
+    />
+
+    <div class="redeem-code">
+      {{ redeem.codigo }}
+    </div>
+
+    <div class="redeem-provider">
+      Beneficio provisto por
+      <div class="provider-logos">
+        <img src="{{ url_for('static', filename='img/proveedor1.png') }}">
+        <img src="{{ url_for('static', filename='img/proveedor2.png') }}">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INSTRUCCIONES -->
+  <div class="redeem-instructions">
+    {{ redeem.instrucciones | safe }}
+  </div>
+
+  <!-- BOTÓN VOLVER -->
+  <a href="{{ url_for('home') }}" class="btn-back-home">
+    Volver al inicio
+  </a>
+
+</section>
+
+{% endblock %}

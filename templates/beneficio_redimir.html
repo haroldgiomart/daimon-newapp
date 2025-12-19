@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<section class="redencion-container">
+
+  <img
+    class="redencion-imagen"
+    src="{{ benefit.listImages[1].url if benefit.listImages|length > 1 else benefit.listImages[0].url }}"
+    alt="{{ benefit.name }}"
+  >
+
+  <h1>{{ benefit.name }}</h1>
+
+  <p class="redencion-mensaje">
+    Estás a punto de redimir este beneficio. Sigue las instrucciones para usarlo correctamente.
+  </p>
+
+  {% if benefit.wayToUse %}
+    <div class="redencion-wayto">
+      <h3>¿Cómo usar este beneficio?</h3>
+
+      <ul>
+        {% if benefit.wayToUse.onsite %}
+          <li>🏬 Preséntalo en tienda física</li>
+        {% endif %}
+        {% if benefit.wayToUse.whatsapp %}
+          <li>💬 Escríbenos por WhatsApp</li>
+        {% endif %}
+        {% if benefit.wayToUse.online %}
+          <li>🌐 Redención online</li>
+        {% endif %}
+        {% if benefit.wayToUse.phone %}
+          <li>📞 Llamada telefónica</li>
+        {% endif %}
+        {% if benefit.wayToUse.email %}
+          <li>✉️ Vía email</li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <div class="redencion-box">
+    <strong>Código de beneficio</strong>
+    <div class="redencion-codigo">
+      {{ benefit.benefitCode or "MUESTRA-1234" }}
+    </div>
+  </div>
+
+  <a href="/" class="redencion-cta">
+    Entendido
+  </a>
+
+</section>
+
+{% endblock %}

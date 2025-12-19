@@ -1,0 +1,628 @@
+/* RESET BÁSICO */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f6f9;
+}
+
+/* ================= HEADER ================= */
+
+.topbar {
+  background: #5b2eff;
+  padding: 12px 16px;
+}
+
+.topbar-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-left {
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 36px;      /* 🔒 límite real */
+  max-width: 120px;  /* 🔒 evita banners gigantes */
+  object-fit: contain;
+}
+
+.topbar-center {
+  flex: 1;
+}
+
+.search {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 24px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+/* ================= CATEGORÍAS ================= */
+
+.categories {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  overflow-x: auto;
+
+  justify-content: center;
+  padding-bottom: 6px;
+}
+
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+.categories a {
+  background: white;
+  color: #5b2eff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ================= MAIN ================= */
+
+.main-content {
+  padding: 20px;
+}
+
+/* ================= SECCIONES ================= */
+
+section {
+  margin-bottom: 32px;
+}
+
+section h2 {
+  margin: 0 0 12px 4px;
+}
+
+/* ================= CARDS ================= */
+
+.cards {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  paddingm: 4px 0 8px 0;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  min-width: 260px;
+  max-width: 260px;
+  padding: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+/* ================= IMAGEN + FAVORITO ================= */
+
+.card-image-wrapper {
+  position: relative;
+}
+
+.card-image-wrapper img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ===== Botón favorito (Daimon style) ===== */
+
+.fav-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+
+  font-size: 18px;
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+  transition: all 0.2s ease;
+}
+
+.fav-btn:hover {
+  color: #5b2eff;
+  transform: scale(1.05);
+}
+.card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card h3 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.card p {
+  font-size: 13px;
+  margin: 0;
+  color: #555;
+}
+
+.card small {
+  font-size: 11px;
+  color: #888;
+}
+
+.card a {
+  margin-top: auto;
+  font-size: 13px;
+  color: #5b2eff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.benefit-tag {
+  display: inline-block;
+  background: #f1edff;
+  color: #5b2eff;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+/* ================= DETALLE BENEFICIO ================= */
+
+.beneficio-detalle-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* -------- Columna izquierda -------- */
+
+.beneficio-short {
+  color: #5b2eff;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.beneficio-title {
+  margin: 0 0 20px 0;
+}
+
+.btn-redimir {
+  background: #5b2eff;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 28px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.beneficio-description {
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.beneficio-verbatim {
+  font-size: 13px;
+  color: #666;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+/* -------- Columna derecha -------- */
+
+.beneficio-right {
+  position: sticky;
+  top: 100px;
+}
+
+.beneficio-image {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.favorito-detalle {
+  width: 100%;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 24px;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.beneficio-wayto {
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.beneficio-wayto h4 {
+  margin: 0 0 8px 0;
+}
+
+.beneficio-wayto ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.beneficio-wayto li {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+/* -------- Mobile -------- */
+
+@media (max-width: 768px) {
+  .beneficio-detalle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .beneficio-right {
+    position: static;
+  }
+}
+
+/* ================= REDENCIÓN ================= */
+
+.redencion-container {
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.redencion-imagen {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.redencion-mensaje {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.redencion-wayto {
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.redencion-wayto ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.redencion-wayto li {
+  margin-bottom: 6px;
+}
+
+.redencion-box {
+  background: #f1edff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.redencion-codigo {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+.redencion-cta {
+  display: block;
+  background: #5b2eff;
+  color: white;
+  padding: 14px;
+  border-radius: 28px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Redneción
+
+/* ===============================
+   REDEEM BENEFIT
+================================ */
+
+.redeem-wrapper {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.redeem-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #4b2dd6;
+  margin-bottom: 24px;
+}
+
+.redeem-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  margin-bottom: 32px;
+}
+
+.redeem-qr {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+.redeem-code {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.redeem-provider {
+  font-size: 12px;
+  color: #777;
+}
+
+.provider-logos {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.provider-logos img {
+  height: 20px;
+}
+
+.redeem-instructions {
+  text-align: left;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.redeem-instructions p {
+  margin-bottom: 8px;
+}
+
+.btn-back-home {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 12px 24px;
+  border-radius: 24px;
+  background: #5b2eff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.btn-back-home:hover {
+  background: #4724c7;
+}
+
+/* ===============================
+   ANIMACIÓN ÉXITO REDENCIÓN
+================================ */
+
+.redeem-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.success-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #5b2eff;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: pop 0.5s ease-out forwards;
+}
+
+.success-text {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4b2dd6;
+}
+
+/* ===== Animaciones ===== */
+
+@keyframes pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================================
+   LANDING PÚBLICA DAIMON
+===================================================== */
+
+.landing-body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #333;
+}
+
+/* -------- Hero -------- */
+
+.landing-hero {
+  background: linear-gradient(135deg, #5b2eff, #4b1fcf);
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.landing-logo {
+  height: 48px;
+  margin-bottom: 24px;
+}
+
+.landing-subtitle {
+  max-width: 520px;
+  margin: 0 auto 32px;
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.landing-btn-primary {
+  display: inline-block;
+  background: white;
+  color: #5b2eff;
+  padding: 14px 32px;
+  border-radius: 28px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* -------- Sections -------- */
+
+.landing-section {
+  padding: 64px 20px;
+  text-align: center;
+}
+
+.landing-section.light {
+  background: #f6f6f9;
+}
+
+.landing-section h2 {
+  margin-bottom: 32px;
+}
+
+/* -------- Cards -------- */
+
+.landing-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.landing-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.landing-card span {
+  font-size: 32px;
+}
+
+/* -------- Steps -------- */
+
+.landing-steps {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.step {
+  max-width: 200px;
+}
+
+.step strong {
+  display: inline-block;
+  background: #5b2eff;
+  color: white;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+/* -------- CTA -------- */
+
+.landing-cta {
+  background: #5b2eff;
+  color: white;
+  padding: 64px 20px;
+  text-align: center;
+}

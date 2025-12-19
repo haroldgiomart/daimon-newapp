@@ -1,0 +1,29 @@
+<header class="topbar">
+  <div class="topbar-container">
+
+    <div class="topbar-left">
+      <img
+        src="{{ url_for('static', filename='img/daimon-logo.png') }}"
+        alt="Daimon"
+        class="logo"
+      />
+    </div>
+
+    <div class="topbar-center">
+      <input
+        class="search"
+        placeholder="Escribe ej: comida, evento, viaje, gato..."
+      />
+    </div>
+
+  </div>
+
+  <nav class="categories">
+    <a href="/">Inicio</a>
+    <a href="/cupones">Cupones</a>
+    <a href="#">Bienestar</a>
+    <a href="#">Compras</a>
+    <a href="#">Turismo</a>
+    <a href="#">Salud</a>
+  </nav>
+</header>

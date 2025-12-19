@@ -1,0 +1,26 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Daimon</title>
+
+  <link rel="manifest" href="/manifest.json">
+  <script src="/static/js/htmx.min.js"></script>
+  <script src="https://unpkg.com/alpinejs" defer></script>
+  <script src="/static/js/pwa.js" defer></script>
+
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+
+<body x-data="{ sidebarOpen: false }">
+
+  {% include 'partials/topbar.html' %}
+  {% include 'partials/sidebar.html' %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Daimon – Beneficios que cuidan de ti</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+
+<body class="landing-body">
+
+  <!-- ================= HERO ================= -->
+  <section class="landing-hero">
+
+    <img
+      src="{{ url_for('static', filename='img/daimon-logo.png') }}"
+      alt="Daimon"
+      class="landing-logo"
+    >
+
+    <h1>Beneficios que cuidan de ti</h1>
+
+    <p class="landing-subtitle">
+      Accede a descuentos, experiencias y servicios pensados para tu bienestar,
+      salud, educación y estilo de vida.
+    </p>
+
+    <a href="{{ url_for('home') }}" class="landing-btn-primary">
+      Ingresar
+    </a>
+
+  </section>
+
+  <!-- ================= BENEFICIOS ================= -->
+  <section class="landing-section">
+
+    <h2>¿Qué puedes encontrar en Daimon?</h2>
+
+    <div class="landing-cards">
+
+      <div class="landing-card">
+        <span>🏋️‍♂️</span>
+        <h3>Bienestar</h3>
+        <p>Gimnasios, yoga, pilates y hábitos saludables.</p>
+      </div>
+
+      <div class="landing-card">
+        <span>🎓</span>
+        <h3>Educación</h3>
+        <p>Cursos, capacitaciones y formación continua.</p>
+      </div>
+
+      <div class="landing-card">
+        <span>✈️</span>
+        <h3>Turismo</h3>
+        <p>Viajes, hoteles y experiencias únicas.</p>
+      </div>
+
+      <div class="landing-card">
+        <span>🛒</span>
+        <h3>Compras</h3>
+        <p>Descuentos en marcas y comercios aliados.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ================= CÓMO FUNCIONA ================= -->
+  <section class="landing-section light">
+
+    <h2>¿Cómo funciona?</h2>
+
+    <div class="landing-steps">
+
+      <div class="step">
+        <strong>1</strong>
+        <p>Ingresa a la plataforma Daimon.</p>
+      </div>
+
+      <div class="step">
+        <strong>2</strong>
+        <p>Explora los beneficios disponibles.</p>
+      </div>
+
+      <div class="step">
+        <strong>3</strong>
+        <p>Redime y disfruta tu beneficio.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ================= CTA FINAL ================= -->
+  <section class="landing-cta">
+
+    <h2>Empieza a disfrutar hoy</h2>
+
+    <a href="{{ url_for('home') }}" class="landing-btn-primary">
+      Ingresar a Daimon
+    </a>
+
+  </section>
+
+</body>
+</html>
