@@ -3,16 +3,7 @@
 {% block content %}
 
 <section>
-  <h2>Mis Favoritos</h2>
-  <div class="cards">
-    {% for benefit in favoritos %}
-      {% include "partials/benefit_card.html" %}
-    {% endfor %}
-  </div>
-</section>
-
-<section>
-  <h2>Recomendados para ti</h2>
+  <h2>Beneficios Recientes</h2>
   <div class="cards">
     {% for benefit in recomendados %}
       {% include "partials/benefit_card.html" %}

@@ -1,10 +1,10 @@
 from flask import Flask, request, abort, render_template
 from services.redeem_service import redeem_benefit
-import requests
+from services.recent_benefits import get_recent_benefits
+from services.benefits_service import get_benefits_by_subcategory
+from services.benefit_details import get_benefit_details
 
 app = Flask(__name__, template_folder="templates")
-
-API_URL = "https://sp37216i6g.execute-api.us-east-1.amazonaws.com/v1/benefits_by_subcategory"
 
 
 @app.route("/")
@@ -14,6 +14,10 @@ def landing():
 @app.route("/home")
 def home():
     # MOCK DATA para home
+
+    data = get_recent_benefits()
+    data = data['data']
+
     mock_benefit = {
         "name": "Beneficio de prueba",
         "shortDescription": "20% de descuento en servicios",
@@ -27,37 +31,27 @@ def home():
     return render_template(
         "home.html",
         favoritos=[mock_benefit, mock_benefit, mock_benefit],
-        recomendados=[mock_benefit, mock_benefit]
+        recomendados=data
+        #recomendados=[mock_benefit, mock_benefit]
+
     )
 
 
 @app.route("/cupones")
 def cupones():
-    response = requests.get(API_URL, timeout=15)
-    data = response.json() if response.status_code == 200 else {}
+
+    data = get_benefits_by_subcategory()
+    print(f"Subcategorías: {len(data)}")
 
     return render_template(
         "cupones.html",
         benefits_by_subcategory=data
     )
 
-@app.route("/beneficio/<benefit_id>")
-def beneficio_detalle(benefit_id):
-    import requests
+@app.route("/beneficio/<benefit_code>/<benefit_id>")
+def beneficio_detalle(benefit_code, benefit_id):
 
-    API_URL = "https://sp37216i6g.execute-api.us-east-1.amazonaws.com/v1/benefits_by_subcategory"
-    response = requests.get(API_URL, timeout=15)
-    data = response.json() if response.status_code == 200 else {}
-
-    # Buscar el beneficio por ID
-    benefit = None
-    for _, benefits in data.items():
-        for b in benefits:
-            if b.get("_id") == benefit_id:
-                benefit = b
-                break
-        if benefit:
-            break
+    benefit = get_benefit_details(benefit_code, benefit_id)
 
     if not benefit:
         return "Beneficio no encontrado", 404
