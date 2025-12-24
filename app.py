@@ -3,9 +3,13 @@ from services.redeem_service import redeem_benefit
 from services.recent_benefits import get_recent_benefits
 from services.benefits_service import get_benefits_by_subcategory
 from services.benefit_details import get_benefit_details
+from cachetools import TTLCache, cached
 
 app = Flask(__name__, template_folder="templates")
-
+cupones_cache = TTLCache(
+    maxsize=1,
+    ttl=60 * 60 * 24
+)
 
 @app.route("/")
 def landing():
@@ -40,13 +44,18 @@ def home():
 @app.route("/cupones")
 def cupones():
 
-    data = get_benefits_by_subcategory()
+    data = get_cupones_cached()
     print(f"Subcategorías: {len(data)}")
 
     return render_template(
         "cupones.html",
         benefits_by_subcategory=data
     )
+
+@cached(cupones_cache)
+def get_cupones_cached():
+    data = get_benefits_by_subcategory()
+    return data
 
 @app.route("/beneficio/<benefit_code>/<benefit_id>")
 def beneficio_detalle(benefit_code, benefit_id):
@@ -88,6 +97,13 @@ def beneficio_redimir(benefit_id):
     except Exception as e:
         print("Error en redención:", e)
         abort(500, description="Error interno al redimir el beneficio")
+
+
+@app.route("/videos")
+def videos():
+    #data = get_videos_by_subcategory()  # tu servicio
+    data = "data"
+    return render_template("videos.html", data=data)
 
 
 

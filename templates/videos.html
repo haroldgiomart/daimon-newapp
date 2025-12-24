@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="category-container">
+
+  {% for sub in data %}
+  <div class="subcategory-block">
+
+    <div class="subcategory-header">
+      <h2>{{ sub.subcategoryName }}</h2>
+    </div>
+
+    <div class="video-row">
+      {% for video in sub.videos %}
+        {% include "partials/video_card.html" %}
+      {% endfor %}
+    </div>
+
+  </div>
+  {% endfor %}
+
+</section>
+
+{% include "partials/video_modal.html" %}
+
+{% endblock %}

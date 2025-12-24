@@ -626,3 +626,83 @@ section h2 {
   padding: 64px 20px;
   text-align: center;
 }
+
+/* ===== Video Cards ===== */
+
+.video-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.video-card {
+  min-width: 220px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.video-card img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+
+.video-info {
+  padding: 10px;
+}
+
+.video-info h4 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.video-info p {
+  font-size: 12px;
+  color: #666;
+}
+
+/* ===== Modal ===== */
+
+.video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.video-modal.active {
+  display: flex;
+}
+
+.video-modal-content {
+  background: #000;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+}
+
+.video-modal-content iframe {
+  width: 100%;
+  height: 450px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
