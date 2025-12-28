@@ -1,0 +1,17 @@
+<div class="card video-card"
+     onclick="openVideo(
+        '{{ video.videoUrl }}',
+        '{{ video.title | e }}'
+     )">
+
+  <div class="card-image">
+    <img src="{{ video.thumbnail }}" alt="{{ video.title }}">
+  </div>
+
+  <div class="card-body">
+    <h4 class="card-title">
+      {{ video.title }}
+    </h4>
+  </div>
+
+</div>

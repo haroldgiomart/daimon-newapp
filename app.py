@@ -4,6 +4,7 @@ from services.recent_benefits import get_recent_benefits
 from services.benefits_service import get_benefits_by_subcategory
 from services.benefit_details import get_benefit_details
 from cachetools import TTLCache, cached
+from services.wellness_videos import get_videos
 
 app = Flask(__name__, template_folder="templates")
 cupones_cache = TTLCache(
@@ -99,12 +100,10 @@ def beneficio_redimir(benefit_id):
         abort(500, description="Error interno al redimir el beneficio")
 
 
-@app.route("/videos")
+@app.route("/salud")
 def videos():
-    #data = get_videos_by_subcategory()  # tu servicio
-    data = "data"
+    data = get_videos()
     return render_template("videos.html", data=data)
-
 
 
 # --------------------------------------------------------- Handlers de Error
