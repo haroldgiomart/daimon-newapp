@@ -26,9 +26,32 @@
       salud, educación y estilo de vida.
     </p>
 
-    <a href="{{ url_for('home') }}" class="landing-btn-primary">
-      Ingresar
-    </a>
+    <div class="landing-hero-buttons">
+
+      <a href="{{ url_for('home') }}" class="landing-btn-primary">
+        Ingresar
+      </a>
+
+      <button class="landing-btn-premium" type="button">
+        Premium
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- ================= VIDEO INTRO ================= -->
+  <section class="landing-video">
+
+    <div class="landing-video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/wmeXFPNO0eo?autoplay=1&mute=1&controls=0&loop=1&playlist=wmeXFPNO0eo"
+        title="Daimon Intro"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
+    </div>
 
   </section>
 

@@ -19,11 +19,28 @@
   </div>
 
   <nav class="categories">
-    <a href="/">Inicio</a>
-    <a href="/cupones">Cupones</a>
-    <a href="#">Bienestar</a>
-    <a href="#">Compras</a>
-    <a href="#">Turismo</a>
-    <a href="/salud">Salud</a>
-  </nav>
+  <a href="/home" class="{% if request.path == '/home' %}active{% endif %}">
+    Inicio
+  </a>
+
+  <a href="/cupones" class="{% if request.path == '/cupones' %}active{% endif %}">
+    Cupones
+  </a>
+
+  <a href="#" class="{% if request.path == '/bienestar' %}active{% endif %}">
+    Bienestar
+  </a>
+
+  <a href="#" class="{% if request.path == '/compras' %}active{% endif %}">
+    Compras
+  </a>
+
+  <a href="#" class="{% if request.path == '/turismo' %}active{% endif %}">
+    Turismo
+  </a>
+
+  <a href="/salud" class="{% if request.path == '/salud' %}active{% endif %}">
+    Salud
+  </a>
+</nav>
 </header>

@@ -71,6 +71,12 @@ body {
   white-space: nowrap;
 }
 
+.categories a.active {
+  background: #5b2eff;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(91,46,255,0.35);
+}
 /* ================= MAIN ================= */
 
 .main-content {
@@ -94,6 +100,8 @@ section h2 {
   gap: 16px;
   overflow-x: auto;
   paddingm: 4px 0 8px 0;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .card {
@@ -168,8 +176,14 @@ section h2 {
 
 .card p {
   font-size: 13px;
-  margin: 0;
   color: #555;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;       /* máximo 3 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  min-height: 42px;            /* fuerza altura consistente */
 }
 
 .card small {
@@ -743,4 +757,108 @@ section h2 {
   inset: 0;
   background: rgba(0,0,0,0.75);
   z-index: 999;
+}
+
+/* ===== Survey refinado Daimon ===== */
+
+.survey-card h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.option-btn {
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.option-btn:hover {
+  border-color: #5b2eff;
+  background: #f1edff;
+}
+
+.option-btn.selected {
+  border-color: #5b2eff;
+  background: #5b2eff;
+  color: white;
+}
+
+.option-btn input {
+  display: none;
+}
+
+/* ===== Título de las subcategorías ===== */
+
+section h2 {
+  margin-top: 32px;
+  margin-left: 16px;
+  margin-bottom: 16px;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b6b6b;
+  letter-spacing: 0.2px;
+}
+
+section h3 {
+  margin-top: 32px;
+  margin-left: 16px;
+  margin-bottom: 16px;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b6b6b;
+  letter-spacing: 0.2px;
+}
+
+.landing-hero-buttons {
+  display: flex;
+  gap: 18px;
+  margin-top: 28px;
+  justify-content: center;
+}
+
+.landing-btn-premium {
+  padding: 14px 26px;
+  border-radius: 12px;
+  font-weight: 600;
+  background-color: #f4c430; /* amarillo Daimon */
+  color: #111;
+  border: none;
+  cursor: default; /* sin evento */
+}
+
+.landing-video {
+  display: flex;
+  justify-content: center;
+  padding: 80px 20px 40px;
+  background-color: #fff;
+}
+
+.landing-video-wrapper {
+  width: 100%;
+  max-width: 1200px; /* más grande */
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+}
+
+.landing-video-wrapper iframe {
+  width: 100%;
+  height: 100%;
 }

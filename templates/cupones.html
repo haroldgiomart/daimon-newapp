@@ -2,20 +2,16 @@
 
 {% block content %}
 
-<h1>Cupones</h1>
-
 {% for subcategory_id, benefits in benefits_by_subcategory.items() %}
-
 <section>
-  <h3>Subcategoría {{ loop.index }}</h3>
+  <h3>{{ subcategory_id }}</h3>
 
   <div class="cards">
-    {% for benefit in benefits[:10] %}
+    {% for benefit in benefits %}
       {% include "partials/benefit_card.html" %}
     {% endfor %}
   </div>
 </section>
-
 {% endfor %}
 
 {% endblock %}

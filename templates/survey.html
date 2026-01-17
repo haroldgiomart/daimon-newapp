@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Daimon · Personaliza tu experiencia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+/* ================= RESET ================= */
+* { box-sizing: border-box; }
+
+/* ================= BODY ================= */
+body {
+  margin: 0;
+  font-family: Arial, system-ui, sans-serif;
+  min-height: 100vh;
+  background: #0b0b12;
+}
+
+/* ================= DESKTOP ILLUSTRATION ================= */
+@media (min-width: 1024px) {
+  body {
+    background-image: url("/static/img/daimon-city.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(11,11,18,0.75),
+        rgba(11,11,18,0.85)
+      );
+    z-index: 0;
+  }
+}
+
+/* ================= SURVEY ================= */
+.survey-wrapper {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.survey-card {
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  border-radius: 26px;
+  padding: 34px 28px 38px;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.45);
+}
+
+/* ================= PROGRESS ================= */
+.progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.progress span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.progress span.active {
+  background: #5b2eff;
+}
+
+/* ================= STEPS ================= */
+.step { display: none; }
+.step.active { display: block; }
+
+.step h2 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 28px;
+  color: #222;
+}
+
+/* ================= OPTIONS ================= */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.option-btn {
+  border: 1px solid #e6e6e6;
+  border-radius: 18px;
+  padding: 18px 14px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s ease;
+  background: #fff;
+}
+
+.option-btn:hover {
+  background: #f1edff;
+  border-color: #5b2eff;
+}
+
+.option-btn.selected {
+  background: #5b2eff;
+  color: #ffffff;
+  border-color: #5b2eff;
+}
+
+.option-btn input { display: none; }
+
+/* ================= CTA ================= */
+.survey-cta {
+  margin-top: 26px;
+  width: 100%;
+  background: #5b2eff;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 420px) {
+  .survey-card {
+    padding: 26px 20px 30px;
+  }
+
+  .step h2 {
+    font-size: 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="survey-wrapper">
+<form method="POST" class="survey-card">
+
+  <!-- Progress -->
+  <div class="progress">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <h2>¿Cuál describe mejor tu situación actual?</h2>
+    <div class="options-grid">
+      {% for opt in ["Estudiante","Trabajador independiente","Empleado","Emprendedor","Padre/Madre","Otro"] %}
+      <label class="option-btn">
+        <input type="radio" name="situation" value="{{opt}}" required>
+        {{opt}}
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <h2>¿Cómo describes tu nivel de estrés diario?</h2>
+    <div class="options-grid">
+      {% for opt in ["Bajo","Medio","Alto"] %}
+      <label class="option-btn">
+        <input type="radio" name="stress_level" value="{{opt}}" required>
+        {{opt}}
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <h2>¿En qué te gustaría mejorar?</h2>
+    <div class="options-grid">
+      {% for opt in ["Energía física","Alimentación","Sueño","Estrés","Actividad física"] %}
+      <label class="option-btn">
+        <input type="checkbox" name="improvement" value="{{opt}}">
+        {{opt}}
+      </label>
+      {% endfor %}
+    </div>
+    <button type="button" class="survey-cta" id="continueBtn">
+      Continuar
+    </button>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <h2>¿Tienes hijos menores de edad?</h2>
+    <div class="options-grid">
+      <label class="option-btn">
+        <input type="radio" name="has_kids" value="si" required> Sí
+      </label>
+      <label class="option-btn">
+        <input type="radio" name="has_kids" value="no"> No
+      </label>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step">
+    <h2>¿Qué te gusta hacer en tus tiempos libres?</h2>
+    <div class="options-grid">
+      {% for opt in ["Ejercicio","Películas y Series","Leer","Música","Otros"] %}
+      <label class="option-btn">
+        <input type="checkbox" name="free_time" value="{{opt}}">
+        {{opt}}
+      </label>
+      {% endfor %}
+    </div>
+    <button type="submit" class="survey-cta">
+      Ver mis beneficios
+    </button>
+  </div>
+
+</form>
+</div>
+
+<script>
+const steps = document.querySelectorAll(".step");
+const dots = document.querySelectorAll(".progress span");
+let current = 0;
+
+function showStep(i) {
+  steps.forEach((s, idx) => s.classList.toggle("active", idx === i));
+  dots.forEach((d, idx) => d.classList.toggle("active", idx === i));
+}
+
+function nextStep() {
+  if (current < steps.length - 1) {
+    current++;
+    showStep(current);
+  }
+}
+
+// Radios
+document.querySelectorAll("input[type=radio]").forEach(input => {
+  input.addEventListener("change", () => {
+    const step = input.closest(".step");
+    step.querySelectorAll(".option-btn")
+      .forEach(btn => btn.classList.remove("selected"));
+    input.closest(".option-btn").classList.add("selected");
+    setTimeout(nextStep, 200);
+  });
+});
+
+// Checkboxes
+document.querySelectorAll("input[type=checkbox]").forEach(input => {
+  input.addEventListener("change", () => {
+    input.closest(".option-btn")
+      .classList.toggle("selected", input.checked);
+  });
+});
+
+// Continuar
+document.getElementById("continueBtn")
+  ?.addEventListener("click", nextStep);
+
+showStep(0);
+</script>
+
+</body>
+</html>
