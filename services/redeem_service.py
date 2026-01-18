@@ -21,3 +21,6 @@ def redeem_benefit(benefit_code:str) -> dict:
     print("Status:", response.status_code)
     print("Response:", response.text)
     return response.json()
+
+if __name__ == '__main__':
+    redeem_benefit("4946")
