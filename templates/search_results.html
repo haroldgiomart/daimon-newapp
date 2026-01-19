@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<section class="benefits-matrix-view">
+
+  <header class="list-header">
+    <h2>{{ title }}</h2>
+    <p>{{ subtitle }}</p>
+  </header>
+
+  <div class="matrix-container">
+
+    {% for row in benefits | batch(5) %}
+      <div class="matrix-row">
+        {% for benefit in row %}
+          <div class="matrix-item">
+            {% include "partials/benefit_card.html" %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+  </div>
+
+</section>
+
+{% endblock %}

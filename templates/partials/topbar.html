@@ -9,38 +9,44 @@
       />
     </div>
 
+    <!-- 🔍 BUSCADOR GLOBAL FUNCIONAL -->
     <div class="topbar-center">
-      <input
-        class="search"
-        placeholder="Escribe ej: comida, evento, viaje, gato..."
-      />
+      <form action="{{ url_for('search') }}" method="GET" class="search-form">
+        <input
+          class="search"
+          type="text"
+          name="q"
+          placeholder="Escribe ej: comida, evento, viaje, gato..."
+          required
+        />
+      </form>
     </div>
 
   </div>
 
   <nav class="categories">
-  <a href="/home" class="{% if request.path == '/home' %}active{% endif %}">
-    Inicio
-  </a>
+    <a href="/home" class="{% if request.path == '/home' %}active{% endif %}">
+      Inicio
+    </a>
 
-  <a href="/cupones" class="{% if request.path == '/cupones' %}active{% endif %}">
-    Cupones
-  </a>
+    <a href="/cupones" class="{% if request.path == '/cupones' %}active{% endif %}">
+      Cupones
+    </a>
 
-  <a href="#" class="{% if request.path == '/bienestar' %}active{% endif %}">
-    Bienestar
-  </a>
+    <a href="#" class="{% if request.path == '/bienestar' %}active{% endif %}">
+      Bienestar
+    </a>
 
-  <a href="#" class="{% if request.path == '/compras' %}active{% endif %}">
-    Compras
-  </a>
+    <a href="#" class="{% if request.path == '/compras' %}active{% endif %}">
+      Compras
+    </a>
 
-  <a href="#" class="{% if request.path == '/turismo' %}active{% endif %}">
-    Turismo
-  </a>
+    <a href="#" class="{% if request.path == '/turismo' %}active{% endif %}">
+      Turismo
+    </a>
 
-  <a href="/salud" class="{% if request.path == '/salud' %}active{% endif %}">
-    Salud
-  </a>
-</nav>
+    <a href="/salud" class="{% if request.path == '/salud' %}active{% endif %}">
+      Salud
+    </a>
+  </nav>
 </header>

@@ -1,4 +1,4 @@
-/* RESET BÁSICO */
+"/* RESET BÁSICO */
 * {
   box-sizing: border-box;
 }
@@ -306,17 +306,20 @@ section h2 {
   margin-bottom: 6px;
 }
 
-/* -------- Mobile -------- */
-
-@media (max-width: 768px) {
-  .beneficio-detalle-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .beneficio-right {
-    position: static;
+/* Tablet / Desktop */
+@media (min-width: 768px) {
+  .search-results .results-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Desktop grande */
+@media (min-width: 1200px) {
+  .search-results .results-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 
 /* ================= REDENCIÓN ================= */
 
@@ -860,5 +863,110 @@ section h3 {
 
 .landing-video-wrapper iframe {
   width: 100%;
+  height: 100%;
+}
+/* CONTENEDOR GENERAL DE RESULTADOS */
+.search-results .results-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.search-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-subtitle {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* GRID DE RESULTADOS */
+.results-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.result-item {
+  width: 100%;
+}
+
+.no-results {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-btn {
+  background: #f5c400; /* amarillo Daimon */
+  border: none;
+  border-radius: 6px;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+
+.search-results .results-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+/* Cada item ocupa su columna */
+.search-results .result-item {
+  width: 100%;
+}
+
+/* Card debe adaptarse al grid */
+.search-results .card {
+  height: 100%;
+}
+
+/* =========================================
+   MATRIX VIEW (ROWS WITH HORIZONTAL SCROLL)
+   ========================================= */
+
+.matrix-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* ⬅️ ya no dependemos del gap */
+}
+
+/* Cada fila es un carrusel independiente */
+.matrix-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0 16px 0.75rem;
+  margin-bottom: 32px; /* ⬅️ separación REAL entre filas */
+  scroll-snap-type: x mandatory;
+}
+
+/* Scroll limpio */
+.matrix-row::-webkit-scrollbar {
+  height: 6px;
+}
+.matrix-row::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 4px;
+}
+
+/* Cada card */
+.matrix-item {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
+}
+
+/* Card ocupa todo su contenedor */
+.matrix-item .card {
   height: 100%;
 }

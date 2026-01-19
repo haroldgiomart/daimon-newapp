@@ -17,6 +17,7 @@ from services.benefits_service import get_benefits_by_subcategory
 from services.benefit_details import get_benefit_details
 from services.wellness_videos import get_videos
 from services.user_profile import build_user_profile
+from services.search_service import search_benefits_from_text
 
 # ---------------------------------------------------------
 # App configuration
@@ -98,6 +99,24 @@ def home():
         recomendados=recomendados
     )
 
+
+@app.route("/search")
+def search():
+    q = request.args.get("q", "").strip()
+
+    if not q:
+        return redirect(url_for("home"))
+
+    benefits = search_benefits_from_text(
+        user_query=q,
+        user_profile_text=session.get("user_semantic_profile", ""),
+        user_tags=session.get("user_tags", [])
+    )
+
+    return render_template(
+        "search_results.html",
+        benefits=benefits
+    )
 # ---------------------------------------------------------
 # Encuesta de recomendaciones
 # ---------------------------------------------------------
@@ -115,6 +134,7 @@ def survey():
         }
 
         user_tags = build_user_profile(data)
+        print(f"User Tags: {user_tags}")
 
         session["survey_completed"] = True
         session["survey_data"] = data
