@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -217,42 +221,101 @@ section h2 {
 
 
 /* ================= DETALLE BENEFICIO ================= */
-
 .beneficio-detalle-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 32px;
-  max-width: 1100px;
-  margin: 0 auto;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding: 16px;
 }
+
+@media (max-width: 1023px) {
+  .beneficio-detalle-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .beneficio-right {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .beneficio-left {
+    padding-right: 0;
+  }
+
+  .btn-redimir {
+    font-size: 1rem;
+    padding: 16px;
+    border-radius: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .beneficio-detalle-grid {
+    display: grid;
+    grid-template-columns: 2.5fr 1.2fr;
+    gap: 40px;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px;
+  }
+
+  .beneficio-right {
+    position: sticky;
+    top: 120px;
+  }
+
+  .btn-redimir {
+    width: fit-content;
+    padding: 14px 28px;
+  }
+}
+
 
 /* -------- Columna izquierda -------- */
 
-.beneficio-short {
-  color: #5b2eff;
-  font-weight: 600;
+.beneficio-title {
+  font-size: 2rem;
   margin-bottom: 12px;
 }
 
-.beneficio-title {
-  margin: 0 0 20px 0;
-}
-
-.btn-redimir {
-  background: #5b2eff;
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 28px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 24px;
+.beneficio-short {
+  font-size: 1.05rem;
+  margin-bottom: 16px;
 }
 
 .beneficio-description {
-  line-height: 1.6;
-  margin-bottom: 24px;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.btn-redimir {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: #5b3df5;
+  color: white;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  margin: 16px 0 24px;
+  text-decoration: none;
+}
+
+.btn-redimir.disabled {
+  background: #ccc;
+}
+
+
+.beneficio-description ul,
+.beneficio-description li {
+  margin-bottom: 8px;
+}
+
+.beneficio-description li {
+  line-height: 1.4;
 }
 
 .beneficio-verbatim {
@@ -271,8 +334,9 @@ section h2 {
 
 .beneficio-image {
   width: 100%;
+  height: auto;
   border-radius: 16px;
-  margin-bottom: 16px;
+  object-fit: cover;
 }
 
 .favorito-detalle {
@@ -292,7 +356,8 @@ section h2 {
 }
 
 .beneficio-wayto h4 {
-  margin: 0 0 8px 0;
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 .beneficio-wayto ul {
@@ -302,8 +367,8 @@ section h2 {
 }
 
 .beneficio-wayto li {
-  font-size: 14px;
   margin-bottom: 6px;
+  font-size: 0.95rem;
 }
 
 /* Tablet / Desktop */
@@ -469,6 +534,14 @@ section h2 {
   background: #4724c7;
 }
 
+
+.btn-back {
+  display: inline-block;
+  margin: 12px 16px;
+  font-size: 0.9rem;
+  color: #5b3df5;
+  text-decoration: none;
+}
 /* ===============================
    ANIMACIÓN ÉXITO REDENCIÓN
 ================================ */
@@ -864,7 +937,7 @@ section h3 {
 .landing-video-wrapper iframe {
   width: 100%;
   height: 100%;
-
+}
 /* CONTENEDOR GENERAL DE RESULTADOS */
 .search-results .results-list {
   display: grid;
@@ -931,4 +1004,47 @@ section h3 {
   height: 100%;
 }
 
+/* =========================================
+   MATRIX VIEW (ROWS WITH HORIZONTAL SCROLL)
+   ========================================= */
 
+.matrix-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* ⬅️ ya no dependemos del gap */
+}
+
+/* Cada fila es un carrusel independiente */
+.matrix-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0 16px 0.75rem;
+  margin-bottom: 32px;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  touch-action: pan-x;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scroll limpio */
+.matrix-row::-webkit-scrollbar {
+  height: 6px;
+}
+.matrix-row::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 4px;
+}
+
+/* Cada card */
+.matrix-item {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
+}
+
+/* Card ocupa todo su contenedor */
+.matrix-item .card {
+  height: 100%;
+}
