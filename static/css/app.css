@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -947,8 +951,12 @@ section h3 {
   gap: 1rem;
   overflow-x: auto;
   padding: 0 16px 0.75rem;
-  margin-bottom: 32px; /* ⬅️ separación REAL entre filas */
+  margin-bottom: 32px;
   scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  touch-action: pan-x;
+  scroll-behavior: smooth;
 }
 
 /* Scroll limpio */
