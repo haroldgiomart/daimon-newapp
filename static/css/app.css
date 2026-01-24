@@ -1048,3 +1048,189 @@ section h3 {
 .matrix-item .card {
   height: 100%;
 }
+
+
+/* =========================================
+   INTENT CARDS – HOME
+   ========================================= */
+
+.intent-section {
+  padding: 24px 0;
+}
+
+.intent-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 16px 16px;
+}
+
+.intent-carousel {
+  display: flex;
+  gap: 16px;
+  padding: 0 16px 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.intent-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.intent-card {
+  flex: 0 0 120px;
+  height: 120px;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #111;
+  scroll-snap-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.intent-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.intent-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Desktop hover */
+@media (hover: hover) {
+  .intent-card:hover {
+    transform: scale(1.12);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+    z-index: 2;
+  }
+}
+
+.intent-card:active {
+  transform: scale(1.05);
+}
+
+/* =========================================
+   INTENT RAIL — Premium Style (Prime / Apple TV)
+   ========================================= */
+
+.intent-rail {
+  padding: 32px 24px;
+}
+
+.intent-title {
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+/* ===== TRACK ===== */
+.intent-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+
+  /* 🔒 ALTURA FIJA DEL RAIL (NO SE MUEVE NADA ABAJO) */
+  height: 190px;
+  align-items: center;
+}
+
+.intent-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== CARD BASE ===== */
+.intent-card {
+  flex: 0 0 160px;
+  height: 160px; /* 🔒 ALTURA FIJA */
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+  scroll-snap-align: center;
+
+  transition:
+    flex-basis 0.35s ease,
+    box-shadow 0.35s ease;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+/* Imagen */
+.intent-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9);
+  transition: transform 0.35s ease;
+}
+
+/* Texto */
+.intent-card span {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  z-index: 2;
+}
+
+/* Overlay */
+.intent-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.1)
+  );
+  z-index: 1;
+}
+
+/* ===== HERO / ACTIVE STATE ===== */
+.intent-card.active {
+  flex-basis: 300px; /* 🔥 SOLO HORIZONTAL */
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+}
+
+.intent-card.active img {
+  transform: scale(1.05);
+}
+
+/* ===== DESKTOP HOVER ===== */
+@media (hover: hover) and (pointer: fine) {
+  .intent-card:hover {
+    flex-basis: 300px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+  }
+
+  .intent-card:hover img {
+    transform: scale(1.05);
+  }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .intent-track {
+    height: 180px;
+  }
+
+  .intent-card {
+    flex: 0 0 75%;
+    height: 150px;
+  }
+
+  .intent-card.active {
+    flex-basis: 85%;
+  }
+}

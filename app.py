@@ -18,6 +18,7 @@ from services.benefit_details import get_benefit_details
 from services.wellness_videos import get_videos
 from services.user_profile import build_user_profile
 from services.search_service import search_benefits_from_text
+from services.semantic_search import semantic_intent_search
 
 # ---------------------------------------------------------
 # App configuration
@@ -44,10 +45,7 @@ cupones_cache = TTLCache(
 
 @cached(cupones_cache)
 def get_cupones_cached(category: str):
-    """
-    Cachea cupones por categoría.
-    IMPORTANTE: nunca cachear funciones sin argumentos.
-    """
+
     logger.info("Cargando cupones desde API (no cache)")
     data = get_benefits_by_subcategory(category)
 
@@ -99,6 +97,21 @@ def home():
         recomendados=recomendados
     )
 
+
+@app.route("/intent/<intent>")
+def intent_search(intent):
+    results = semantic_intent_search(
+        intent=intent,
+        user_profile_text=session.get("user_semantic_profile", ""),
+        user_tags=session.get("user_tags", [])
+    )
+
+    return render_template(
+        "search_results.html",
+        title=f"Planes de {intent}",
+        subtitle="Recomendado para ti",
+        benefits=results
+    )
 
 @app.route("/search")
 def search():
