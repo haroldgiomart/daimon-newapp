@@ -1,0 +1,59 @@
+<head>
+    <meta charset="UTF-8">
+    <title>{{ exercise.name }}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/exercise_detail.css') }}">
+</head>
+
+<section class="exercise-detail">
+
+  <a href="/ejercicios" class="back-link">← Volver a ejercicios</a>
+
+  <!-- HEADER -->
+  <div class="exercise-header">
+
+    <!-- COLUMNA IZQUIERDA -->
+    <div class="exercise-media">
+      <img src="{{ exercise.img_animated }}" alt="{{ exercise.name }}">
+    </div>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="exercise-summary">
+      <h1 class="exercise-title">{{ exercise.name }}</h1>
+
+      <div class="exercise-meta">
+        <span class="meta-chip target">{{ exercise.target }}</span>
+
+        <span class="meta-chip level level-{{ exercise.difficulty }}">
+          Nivel {{ exercise.difficulty }}
+        </span>
+
+        <span class="meta-chip type">
+          {{ exercise.exerciseType }}
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BENEFICIOS -->
+  <div class="exercise-section">
+    <h2>Beneficios del ejercicio</h2>
+    <p>{{ exercise.exerciseBenefit }}</p>
+  </div>
+
+  <!-- INSTRUCCIONES -->
+  <div class="exercise-section">
+    <h2>Cómo realizar el ejercicio</h2>
+    <ol class="exercise-steps">
+      {% for step in exercise.instructions %}
+        <li>{{ step }}</li>
+      {% endfor %}
+    </ol>
+  </div>
+
+  <button class="add-routine-btn">
+    Agregar a mi rutina
+  </button>
+
+</section>

@@ -19,6 +19,7 @@ from services.wellness_videos import get_videos
 from services.user_profile import build_user_profile
 from services.search_service import search_benefits_from_text
 from services.semantic_search import semantic_intent_search
+from services.exercise_service import get_exercises_grouped_by_target, get_exercise_by_id, all_items
 
 # ---------------------------------------------------------
 # App configuration
@@ -28,6 +29,7 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "unsafe-dev-key")
 
 # ---------------------------------------------------------
+
 # Logging (producción)
 # ---------------------------------------------------------
 
@@ -228,7 +230,48 @@ def beneficio_redimir(benefit_id):
 # ---------------------------------------------------------
 # Videos de salud
 # ---------------------------------------------------------
+@app.route("/ejercicios")
+def ejercicios():
 
+    """
+    data = get_exercises_grouped_by_target(
+        target_filter="pantorrillas",
+        limit_per_target=10
+    )
+
+    """
+
+    data = all_items()
+
+
+    return render_template(
+        "ejercicios.html",
+        exercises_by_target=data
+    )
+
+
+@app.route("/exercise/<exercise_id>")
+def exercise_detail(exercise_id):
+    try:
+        # Ejemplo: buscar ejercicio en DynamoDB / JSON / lista
+        exercise = get_exercise_by_id(exercise_id)
+
+        if not exercise:
+            return render_template("404.html"), 404
+
+        return render_template(
+            "exercise_detail.html",
+            exercise=exercise
+        )
+
+    except Exception as e:
+        return render_template(
+            "error.html",
+            error=str(e)
+        ), 500
+# ---------------------------------------------------------
+# Videos de salud
+# ---------------------------------------------------------
 @app.route("/salud")
 def videos():
     data = get_videos()

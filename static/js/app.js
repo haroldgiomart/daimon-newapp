@@ -78,3 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
     activeCard.classList.add("active");
   }
 });
+
+
+
+document.querySelectorAll(".exercise-favorite").forEach(btn => {
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    btn.classList.toggle("active");
+  });
+});

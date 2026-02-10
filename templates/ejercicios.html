@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% for target, exercises in exercises_by_target.items() %}
+<section>
+  <h3>{{ target }}</h3>
+
+  <div class="cards">
+    {% for exercise in exercises %}
+      {% include "partials/exercise_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+{% endblock %}

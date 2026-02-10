@@ -1234,3 +1234,272 @@ section h3 {
     flex-basis: 85%;
   }
 }
+
+.exercise-card img {
+  animation-play-state: paused;
+}
+
+
+
+/* ===== PHYSICAL ACTIVITY  ===== */
+
+.exercise-card {
+  min-width: 260px;
+  max-width: 260px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  text-decoration: none;
+  color: inherit;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  position: relative;
+  display: block;
+}
+
+.exercise-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+
+/* Imagen CARD */
+.exercise-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+}
+
+.exercise-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.exercise-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Favorito */
+.exercise-image {
+  position: relative;
+}
+
+.exercise-favorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+.exercise-favorite i {
+  font-size: 16px;
+  color: #9ca3af;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+/* Estado favorito */
+.exercise-favorite.active i {
+  color: #e11d48;
+  transform: scale(1.2);
+}
+
+/* Animación tipo pop */
+.exercise-favorite.pop i {
+  animation: heart-pop 0.3s ease;
+}
+
+@keyframes heart-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1.2); }
+}
+/* Info */
+.exercise-info {
+  padding: 12px 14px 16px;
+}
+
+.exercise-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+/* Nivel */
+.exercise-difficulty {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.level-bajo  { background: #22c55e; }
+.level-medio { background: #f59e0b; }
+.level-alto  { background: #ef4444; }
+
+/* Tags */
+.exercise-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.tag.primary {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+/* =========================
+   DETALLE EJERCICIO
+========================= */
+.exercise-detail {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 100px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #4f46e5;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Header grid */
+.exercise-header {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 32px;
+}
+
+/* Imagen detalle */
+.exercise-media {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+
+.exercise-media img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Summary */
+.exercise-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.exercise-title {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.exercise-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.meta-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #f1f1f1;
+}
+
+.meta-chip.target {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.meta-chip.type {
+  background: #ecfeff;
+  color: #0369a1;
+}
+
+/* Sections */
+.exercise-section {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+
+.exercise-section h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* Steps */
+.exercise-steps {
+  padding-left: 20px;
+}
+
+.exercise-steps li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* Button */
+.add-routine-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(79,70,229,.35);
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .exercise-header {
+    grid-template-columns: 1fr;
+  }
+
+  .add-routine-btn {
+    width: calc(100% - 40px);
+  }
+}
