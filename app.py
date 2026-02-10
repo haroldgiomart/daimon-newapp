@@ -220,7 +220,9 @@ def beneficio_redimir(benefit_id):
 
         return render_template(
             "beneficio_redencion.html",
-            redeem=response["success"]
+            redeem=response["success"],
+            benefit_id=benefit_id,
+            benefit_code=benefit_code
         )
 
     except Exception as e:

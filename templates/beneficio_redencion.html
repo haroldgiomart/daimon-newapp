@@ -1,17 +1,13 @@
 {% extends "layout.html" %}
 
+{% block content %}
+
 <div class="redeem-success">
-  <div class="success-circle">
-    ✓
-  </div>
+  <div class="success-circle">✓</div>
   <p class="success-text">
     ¡Beneficio redimido con éxito!
   </p>
 </div>
-
-{% block content %}
-
-
 
 <section class="redeem-wrapper">
 
@@ -54,5 +50,38 @@
   </a>
 
 </section>
+
+<!-- =========================
+     GA4 TRACKING
+========================= -->
+<script>
+  try {
+    if (typeof gtag === "function") {
+      // Evento de conversión (redención exitosa)
+      gtag("event", "benefit_redeemed", {
+        event_category: "benefits",
+        event_label: "{{ redeem.codigo }}",
+        value: 1
+      });
+    }
+  } catch (error) {
+    if (typeof gtag === "function") {
+      gtag("event", "exception", {
+        description: error.message,
+        fatal: false
+      });
+    }
+  }
+
+  // Captura errores JS globales
+  window.onerror = function (message, source, lineno, colno) {
+    if (typeof gtag === "function") {
+      gtag("event", "exception", {
+        description: message + " @ " + source + ":" + lineno,
+        fatal: false
+      });
+    }
+  };
+</script>
 
 {% endblock %}

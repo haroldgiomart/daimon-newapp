@@ -5,12 +5,30 @@
   <meta charset="UTF-8">
   <title>Daimon</title>
 
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6CEGE34ZBP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-6CEGE34ZBP', {
+      anonymize_ip: true
+    });
+  </script>
+
+  <!-- PWA / Meta -->
   <link rel="manifest" href="/manifest.json">
+
+  <!-- JS libs -->
   <script src="/static/js/htmx.min.js"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
   <script src="/static/js/pwa.js" defer></script>
 
+  <!-- Styles -->
   <link rel="stylesheet" href="/static/css/app.css">
+
+  <!-- App JS -->
   <script src="{{ url_for('static', filename='js/exercises.js') }}"></script>
 </head>
 
@@ -22,7 +40,19 @@
   <main>
     {% block content %}{% endblock %}
   </main>
+
   <script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
+
+  <!-- GA4 support for HTMX (page views sin recarga) -->
+  <script>
+    document.body.addEventListener('htmx:afterSwap', function () {
+      if (typeof gtag === "function") {
+        gtag('event', 'page_view', {
+          page_path: window.location.pathname
+        });
+      }
+    });
+  </script>
 
 </body>
 </html>
