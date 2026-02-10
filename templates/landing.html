@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Daimon – Beneficios que cuidan de ti</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6CEGE34ZBP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6CEGE34ZBP');
+  </script>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 
@@ -27,7 +38,6 @@
     </p>
 
     <div class="landing-hero-buttons">
-
       <a href="{{ url_for('home') }}" class="landing-btn-primary">
         Ingresar
       </a>
@@ -35,14 +45,12 @@
       <button class="landing-btn-premium" type="button">
         Premium
       </button>
-
     </div>
 
   </section>
 
   <!-- ================= VIDEO INTRO ================= -->
   <section class="landing-video">
-
     <div class="landing-video-wrapper">
       <iframe
         src="https://www.youtube.com/embed/wmeXFPNO0eo?autoplay=1&mute=1&controls=0&loop=1&playlist=wmeXFPNO0eo"
@@ -52,16 +60,13 @@
         allowfullscreen>
       </iframe>
     </div>
-
   </section>
 
   <!-- ================= BENEFICIOS ================= -->
   <section class="landing-section">
-
     <h2>¿Qué puedes encontrar en Daimon?</h2>
 
     <div class="landing-cards">
-
       <div class="landing-card">
         <span>🏋️‍♂️</span>
         <h3>Bienestar</h3>
@@ -85,18 +90,14 @@
         <h3>Compras</h3>
         <p>Descuentos en marcas y comercios aliados.</p>
       </div>
-
     </div>
-
   </section>
 
   <!-- ================= CÓMO FUNCIONA ================= -->
   <section class="landing-section light">
-
     <h2>¿Cómo funciona?</h2>
 
     <div class="landing-steps">
-
       <div class="step">
         <strong>1</strong>
         <p>Ingresa a la plataforma Daimon.</p>
@@ -111,20 +112,16 @@
         <strong>3</strong>
         <p>Redime y disfruta tu beneficio.</p>
       </div>
-
     </div>
-
   </section>
 
   <!-- ================= CTA FINAL ================= -->
   <section class="landing-cta">
-
     <h2>Empieza a disfrutar hoy</h2>
 
     <a href="{{ url_for('home') }}" class="landing-btn-primary">
       Ingresar a Daimon
     </a>
-
   </section>
 
 </body>
