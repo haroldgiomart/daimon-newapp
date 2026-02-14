@@ -3,40 +3,57 @@
   {% set label = "Cupón" %}
 {% endif %}
 
-<a href="/beneficio/{{ benefit.benefitCode }}/{{ benefit._id }}"
-   class="card-link">
+<div class="card-container">
 
-  <div class="card">
+  <!-- Botón favorito FUERA del link -->
+  <button
+    class="favorite-btn {% if benefit._id in favoritos %}active{% endif %}"
+    data-id="{{ benefit._id }}"
+    data-type="benefit"
+    onclick="toggleFavorite(event, this)"
+  >
+    <i class="{% if benefit._id in favoritos %}
+                  fa-solid fa-heart
+              {% else %}
+                  fa-regular fa-heart
+              {% endif %}">
+    </i>
+  </button>
 
-    <div class="card-image-wrapper">
-      {% if benefit.listImages and benefit.listImages|length > 0 %}
-        <img
-          src="{{ benefit.listImages[1].url }}"
-          alt="{{ benefit.name }}"
-          loading="lazy"
-        >
-      {% else %}
-        <img
-          src="https://via.placeholder.com/300x200?text=Beneficio"
-          alt="Beneficio"
-        >
-      {% endif %}
-    </div>
+  <a href="/beneficio/{{ benefit.benefitCode }}/{{ benefit._id }}"
+     class="card-link">
 
-    <h3 class="card-title">{{ benefit.name }}</h3>
+    <div class="card">
 
-    {% if benefit.shortDescription %}
-      <p class="card-description">{{ benefit.shortDescription }}</p>
-    {% endif %}
-
-    <div class="card-footer">
-      <div class="card-footer-left">
-        <span class="benefit-tag">{{ label }}</span>
+      <div class="card-image-wrapper">
+        {% if benefit.listImages and benefit.listImages|length > 0 %}
+          <img
+            src="{{ benefit.listImages[1].url }}"
+            alt="{{ benefit.name }}"
+            loading="lazy"
+          >
+        {% else %}
+          <img
+            src="https://via.placeholder.com/300x200?text=Beneficio"
+            alt="Beneficio"
+          >
+        {% endif %}
       </div>
 
-      <button class="fav-btn" title="Marcar como favorito">♡</button>
+      <h3 class="card-title">{{ benefit.name }}</h3>
+
+      {% if benefit.shortDescription %}
+        <p class="card-description">{{ benefit.shortDescription }}</p>
+      {% endif %}
+
+      <div class="card-footer">
+        <div class="card-footer-left">
+          <span class="benefit-tag">{{ label }}</span>
+        </div>
+      </div>
+
     </div>
 
-  </div>
+  </a>
 
-</a>
+</div>

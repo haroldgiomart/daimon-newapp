@@ -1,5 +1,7 @@
 import os
 import logging
+import uuid
+
 from flask import (
     Flask,
     request,
@@ -7,8 +9,10 @@ from flask import (
     render_template,
     session,
     redirect,
-    url_for
+    url_for,
+    jsonify
 )
+
 from cachetools import TTLCache, cached
 
 from services.redeem_service import redeem_benefit
@@ -19,7 +23,18 @@ from services.wellness_videos import get_videos
 from services.user_profile import build_user_profile
 from services.search_service import search_benefits_from_text
 from services.semantic_search import semantic_intent_search
-from services.exercise_service import get_exercises_grouped_by_target, get_exercise_by_id, all_items
+from services.exercise_service import (
+    get_exercise_by_id,
+    all_items
+)
+
+from services.user_data_service import (
+    save_profile,
+    add_favorite,
+    remove_favorite,
+    get_user_items,
+    get_user_favorites
+)
 
 # ---------------------------------------------------------
 # App configuration
@@ -29,34 +44,46 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "unsafe-dev-key")
 
 # ---------------------------------------------------------
-
-# Logging (producción)
+# Logging
 # ---------------------------------------------------------
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------
-# Cache configuration (24 horas)
+# Ensure anon or logged user
+# ---------------------------------------------------------
+
+@app.before_request
+def ensure_user():
+    if "user_id" not in session and "anon_id" not in session:
+        session["anon_id"] = str(uuid.uuid4())
+
+
+def get_current_user_id():
+    return session.get("user_id") or session.get("anon_id")
+
+
+# ---------------------------------------------------------
+# Cache configuration (24h)
 # ---------------------------------------------------------
 
 cupones_cache = TTLCache(
-    maxsize=5,              # permite crecer un poco sin riesgo
-    ttl=60 * 60 * 24        # 24 horas
+    maxsize=5,
+    ttl=60 * 60 * 24
 )
+
 
 @cached(cupones_cache)
 def get_cupones_cached(category: str):
-
     logger.info("Cargando cupones desde API (no cache)")
     data = get_benefits_by_subcategory(category)
 
-    # Defensa: no cachear vacío si la API falla
     if not data:
-        logger.warning("API devolvió vacío, no se cachea")
         raise ValueError("No se cachean resultados vacíos")
 
     return data
+
 
 # ---------------------------------------------------------
 # Landing
@@ -66,6 +93,7 @@ def get_cupones_cached(category: str):
 def landing():
     return render_template("landing.html")
 
+
 # ---------------------------------------------------------
 # Home
 # ---------------------------------------------------------
@@ -73,39 +101,59 @@ def landing():
 @app.route("/home")
 def home():
 
-    if not session.get("survey_completed"):
+    user_id = get_current_user_id()
+    items = get_user_items(user_id)
+
+    # PROFILE
+    profile_item = next(
+        (item for item in items if item["SK"] == "PROFILE"),
+        None
+    )
+
+    if not profile_item:
         return redirect(url_for("survey"))
 
-    user_tags = session.get("user_tags", [])
-    logger.info("User tags: %s", user_tags)
+    user_tags = profile_item.get("user_tags", [])
+    logger.info("User tags desde Dynamo: %s", user_tags)
+
+    # FAVORITOS (benefits y exercises)
+    favorite_ids = []
+
+    for item in items:
+        if item["SK"].startswith("FAVORITE#"):
+            favorite_ids.append(item.get("item_id"))
 
     response = get_recent_benefits()
     recomendados = response.get("data", []) if isinstance(response, dict) else []
 
-    # Mock favoritos (placeholder)
-    mock_benefit = {
-        "name": "Beneficio de prueba",
-        "shortDescription": "20% de descuento en servicios",
-        "country": "colombia",
-        "listImages": [
-            {"url": "https://via.placeholder.com/300x200"},
-            {"url": "https://via.placeholder.com/300x200"}
-        ]
-    }
-
     return render_template(
         "home.html",
-        favoritos=[mock_benefit, mock_benefit, mock_benefit],
+        favoritos=favorite_ids,
         recomendados=recomendados
     )
 
 
+# ---------------------------------------------------------
+# Intent Search
+# ---------------------------------------------------------
+
 @app.route("/intent/<intent>")
 def intent_search(intent):
+
+    user_id = get_current_user_id()
+    items = get_user_items(user_id)
+
+    profile_item = next(
+        (item for item in items if item["SK"] == "PROFILE"),
+        None
+    )
+
+    user_tags = profile_item.get("user_tags", []) if profile_item else []
+
     results = semantic_intent_search(
         intent=intent,
-        user_profile_text=session.get("user_semantic_profile", ""),
-        user_tags=session.get("user_tags", [])
+        user_profile_text="",
+        user_tags=user_tags
     )
 
     return render_template(
@@ -114,6 +162,11 @@ def intent_search(intent):
         subtitle="Recomendado para ti",
         benefits=results
     )
+
+
+# ---------------------------------------------------------
+# Search
+# ---------------------------------------------------------
 
 @app.route("/search")
 def search():
@@ -124,16 +177,18 @@ def search():
 
     benefits = search_benefits_from_text(
         user_query=q,
-        user_profile_text=session.get("user_semantic_profile", ""),
-        user_tags=session.get("user_tags", [])
+        user_profile_text="",
+        user_tags=[]
     )
 
     return render_template(
         "search_results.html",
         benefits=benefits
     )
+
+
 # ---------------------------------------------------------
-# Encuesta de recomendaciones
+# Survey
 # ---------------------------------------------------------
 
 @app.route("/survey", methods=["GET", "POST"])
@@ -149,20 +204,56 @@ def survey():
         }
 
         user_tags = build_user_profile(data)
-        print(f"User Tags: {user_tags}")
+        user_id = get_current_user_id()
 
-        session["survey_completed"] = True
-        session["survey_data"] = data
-        session["user_tags"] = list(user_tags)
-
-        logger.info("Survey completada")
+        save_profile(user_id, data, list(user_tags))
 
         return redirect(url_for("home"))
 
     return render_template("survey.html")
 
+
 # ---------------------------------------------------------
-# Cupones (cache 24h)
+# Toggle Favorite (ARQUITECTURA CORRECTA)
+# ---------------------------------------------------------
+
+@app.route("/toggle-favorite", methods=["POST"])
+def toggle_favorite():
+
+    user_id = get_current_user_id()
+
+    data = request.json
+    item_id = data.get("item_id")
+    item_type = data.get("item_type")  # "exercise" o "benefit"
+    is_active = data.get("is_active")
+
+    if not item_id or not item_type:
+        return jsonify({"error": "Missing data"}), 400
+
+    try:
+        if is_active:
+            add_favorite(
+                user_id=user_id,
+                item_id=item_id,
+                item_type=item_type
+            )
+        else:
+            remove_favorite(
+                user_id=user_id,
+                item_id=item_id,
+                item_type=item_type
+            )
+
+        return jsonify({"success": True})
+
+    except Exception as Error:
+        print(f"Error toggle: {Error}")
+        logger.exception("Error toggling favorite")
+        return jsonify({"error": "Server error"}), 500
+
+
+# ---------------------------------------------------------
+# Cupones
 # ---------------------------------------------------------
 
 @app.route("/cupones")
@@ -170,17 +261,22 @@ def cupones():
     try:
         data = get_cupones_cached("cupones")
     except Exception:
-        # fallback si el cache no pudo cargarse
-        logger.warning("Fallback sin cache para cupones")
         data = get_benefits_by_subcategory("cupones") or {}
+
+    # 🔥 NUEVO: traer favoritos del usuario
+    user_id = get_current_user_id()
+    favorites = get_user_favorites(user_id, item_type="benefit")
+    favorite_ids = [item["item_id"] for item in favorites]
 
     return render_template(
         "cupones.html",
-        benefits_by_subcategory=data
+        benefits_by_subcategory=data,
+        favoritos=favorite_ids  # 🔥 enviar al template
     )
 
+
 # ---------------------------------------------------------
-# Detalle de beneficio
+# Detalle Beneficio
 # ---------------------------------------------------------
 
 @app.route("/beneficio/<benefit_code>/<benefit_id>")
@@ -196,6 +292,7 @@ def beneficio_detalle(benefit_code, benefit_id):
         benefit=benefit
     )
 
+
 # ---------------------------------------------------------
 # Redención
 # ---------------------------------------------------------
@@ -209,8 +306,6 @@ def beneficio_redimir(benefit_id):
         abort(400, description="benefitCode es requerido")
 
     benefit_code = benefit_code.lstrip("#")
-    print(f"Este es el código del beneficio {benefit_code}")
-
 
     try:
         response = redeem_benefit(benefit_code[1:])
@@ -225,59 +320,53 @@ def beneficio_redimir(benefit_id):
             benefit_code=benefit_code
         )
 
-    except Exception as e:
+    except Exception:
         logger.exception("Error en redención")
         abort(500)
 
+
 # ---------------------------------------------------------
-# Videos de salud
+# Ejercicios
 # ---------------------------------------------------------
+
 @app.route("/ejercicios")
 def ejercicios():
-
-    """
-    data = get_exercises_grouped_by_target(
-        target_filter="pantorrillas",
-        limit_per_target=10
-    )
-
-    """
-
     data = all_items()
 
+    user_id = get_current_user_id()
+    favorites = get_user_favorites(user_id, item_type="exercise")
+    favorite_ids = [item["item_id"] for item in favorites]
 
     return render_template(
         "ejercicios.html",
-        exercises_by_target=data
+        exercises_by_target=data,
+        favoritos=favorite_ids
     )
 
 
 @app.route("/exercise/<exercise_id>")
 def exercise_detail(exercise_id):
-    try:
-        # Ejemplo: buscar ejercicio en DynamoDB / JSON / lista
-        exercise = get_exercise_by_id(exercise_id)
 
-        if not exercise:
-            return render_template("404.html"), 404
+    exercise = get_exercise_by_id(exercise_id)
 
-        return render_template(
-            "exercise_detail.html",
-            exercise=exercise
-        )
+    if not exercise:
+        return render_template("404.html"), 404
 
-    except Exception as e:
-        return render_template(
-            "error.html",
-            error=str(e)
-        ), 500
+    return render_template(
+        "exercise_detail.html",
+        exercise=exercise
+    )
+
+
 # ---------------------------------------------------------
-# Videos de salud
+# Videos
 # ---------------------------------------------------------
+
 @app.route("/salud")
 def videos():
     data = get_videos()
     return render_template("videos.html", data=data)
+
 
 # ---------------------------------------------------------
 # Error handlers
@@ -305,6 +394,7 @@ def server_error(error):
         "error.html",
         message="Ocurrió un error procesando la solicitud"
     ), 500
+
 
 # ---------------------------------------------------------
 # Run

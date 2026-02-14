@@ -134,38 +134,30 @@ section h2 {
 }
 
 /* ===== Botón favorito (Daimon style) ===== */
+.card-container {
+  position: relative;
+}
 
 .fav-btn {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-
-  width: 32px;
-  height: 32px;
-
-  border-radius: 50%;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background: white;
   border: none;
-
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
-
-  font-size: 18px;
-  line-height: 1;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  font-size: 22px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-
-  transition: all 0.2s ease;
 }
 
 .fav-btn:hover {
   color: #5b2eff;
   transform: scale(1.05);
 }
+
+.fav-btn.active {
+  color: red;
+}
+
 .card img {
   width: 100%;
   height: 120px;
@@ -1239,9 +1231,11 @@ section h3 {
   animation-play-state: paused;
 }
 
-
-
 /* ===== PHYSICAL ACTIVITY  ===== */
+
+/* =========================
+   CARD EJERCICIO
+========================= */
 
 .exercise-card {
   min-width: 260px;
@@ -1256,7 +1250,10 @@ section h3 {
   transition: transform .2s ease, box-shadow .2s ease;
 
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  overflow: hidden;
 }
 
 .exercise-card:hover {
@@ -1264,15 +1261,9 @@ section h3 {
   box-shadow: 0 10px 24px rgba(0,0,0,.08);
 }
 
-/* Imagen CARD */
-.exercise-image {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: #ffffff;
-  border-radius: 18px 18px 0 0;
-  overflow: hidden;
-}
+/* =========================
+   LINK QUE CUBRE TODA LA CARD
+========================= */
 
 .exercise-link {
   position: absolute;
@@ -1280,47 +1271,74 @@ section h3 {
   z-index: 1;
 }
 
-.exercise-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+/* =========================
+   IMAGEN
+========================= */
 
-/* Favorito */
 .exercise-image {
   position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 28px;
 }
+
+.exercise-image img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  z-index: 0;
+}
+
+/* =========================
+   FAVORITO - EJERCICIOS
+========================= */
 
 .exercise-favorite {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 34px;
-  height: 34px;
+  bottom: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: white;
-  border: none;
+
+  background: #ffffff;      /* 🤍 Siempre blanco cuando NO está activo */
+  border: 1px solid #f0f0f0;
+
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 5;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+
+  z-index: 5;               /* 🔥 Encima del link */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+  transition: transform 0.2s ease;
+}
+
+.exercise-favorite:hover {
+  transform: scale(1.08);
 }
 
 .exercise-favorite i {
   font-size: 16px;
-  color: #9ca3af;
+  color: #9ca3af; /* gris cuando NO es favorito */
   transition: transform 0.25s ease, color 0.25s ease;
 }
 
-/* Estado favorito */
+/* 🔥 ACTIVO: SOLO cambia el ícono */
 .exercise-favorite.active i {
-  color: #e11d48;
-  transform: scale(1.2);
+  color: #6C3BFF; /* morado Daimon */
+  transform: scale(1.15);
 }
 
-/* Animación tipo pop */
+/* Animación pop */
 .exercise-favorite.pop i {
   animation: heart-pop 0.3s ease;
 }
@@ -1328,11 +1346,19 @@ section h3 {
 @keyframes heart-pop {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.4); }
-  100% { transform: scale(1.2); }
+  100% { transform: scale(1.15); }
 }
-/* Info */
+
+/* =========================
+   INFO
+========================= */
+
 .exercise-info {
-  padding: 12px 14px 16px;
+  display: grid;
+  grid-template-columns: 70% 30%;
+  align-items: start;
+  padding: 16px;
+  gap: 12px;
 }
 
 .exercise-name {
@@ -1342,40 +1368,53 @@ section h3 {
   margin-bottom: 6px;
 }
 
-/* Nivel */
+/* =========================
+   NIVEL
+========================= */
+
 .exercise-difficulty {
-  display: inline-block;
-  padding: 4px 10px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 6px 14px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 10px;
+  color: #fff;
+  z-index: 2;
 }
 
-.level-bajo  { background: #22c55e; }
-.level-medio { background: #f59e0b; }
-.level-alto  { background: #ef4444; }
+.level-bajo  { background: #DDD6FE; }
+.level-medio { background: #6C3BFF; }
+.level-alto  { background: #312E81; }  /* casi índigo */
 
-/* Tags */
+/* =========================
+   TAGS
+========================= */
+
 .exercise-tags {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding: 0 16px 16px 16px;
 }
 
 .tag {
-  background: #f3f4f6;
-  color: #374151;
-  font-size: 11px;
-  padding: 4px 8px;
-  border-radius: 999px;
+  background: rgba(250, 204, 21, 0.15);  /* amarillo Daimon pastel */
+  color: #92400E;                        /* ámbar oscuro elegante */
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 500;
+  width: fit-content;
 }
 
 .tag.primary {
   background: #ede9fe;
   color: #5b21b6;
 }
+
 
 /* =========================
    DETALLE EJERCICIO
@@ -1502,4 +1541,41 @@ section h3 {
   .add-routine-btn {
     width: calc(100% - 40px);
   }
+}
+
+/* -------------------------Favorite Button --------------- */
+
+.favorite-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.favorite-btn i {
+  font-size: 16px;
+  color: #999; /* gris cuando no está activo */
+  transition: all 0.2s ease;
+}
+
+/* 🔥 ACTIVO UNIFICADO */
+
+
+.favorite-btn.active i {
+  color: #6c3bff; /* 💜 morado Daimon */
+}
+
+.favorite-btn:hover {
+  transform: scale(1.08);
+  transition: 0.2s ease;
 }

@@ -1,59 +1,41 @@
-<script>
-async function loadExercises() {
-  const res = await fetch('/api/exercises');
-  const exercises = await res.json();
+// --------------------------------------------------
+// Toggle Favorite (ejercicios)
+// --------------------------------------------------
 
-  const grid = document.getElementById('exerciseGrid');
-  grid.innerHTML = '';
+async function toggleFavorite(event, exerciseId) {
+  event.preventDefault();
+  event.stopPropagation();
 
-  exercises.forEach(ex => {
+  const button = event.currentTarget;
+  const img = button.querySelector("img");
 
-    const difficulty = ex.difficultyLevel.toLowerCase();
-    const difficultyLabel =
-      difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+  const isActive = button.classList.contains("active");
 
-    const secondaryTags = ex.secondaryMuscles
-      .map(m => `<span class="tag">${m}</span>`)
-      .join('');
+  try {
+    const response = await fetch("/toggle-favorite", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        item_id: exerciseId,
+        item_type: "exercise",
+        is_active: !isActive
+      })
+    });
 
-    const card = document.createElement('div');
-    card.className = 'exercise-card';
+    if (!response.ok) {
+      throw new Error("Error actualizando favorito");
+    }
 
-    card.innerHTML = `
-      <a class="exercise-image" href="/exercise-detail.html?id=${ex.id}">
-        <img src="${ex.img_static}" alt="${ex.name}">
+    // Toggle visual state
+    button.classList.toggle("active");
 
-        <span class="difficulty-badge difficulty-${difficulty}">
-          ${difficultyLabel}
-        </span>
+    img.src = button.classList.contains("active")
+      ? "/assets/icons/heart-filled.svg"
+      : "/assets/icons/heart-outline.svg";
 
-        <button class="favorite-btn"
-                onclick="toggleFavorite(event, '${ex.id}')">
-          <!-- AQUÍ VA TU ICONO REAL -->
-          <img src="/assets/icons/heart-outline.svg" alt="favorito">
-        </button>
-      </a>
-
-      <div class="exercise-info">
-        <small>Dificultad: <strong>${difficultyLabel}</strong></small>
-
-        <div class="muscle-tags">
-          ${secondaryTags}
-        </div>
-      </div>
-    `;
-
-    grid.appendChild(card);
-  });
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
-
-function toggleFavorite(e, id) {
-  e.preventDefault();
-  e.stopPropagation();
-
-  console.log('Favorito:', id);
-  // aquí conectas backend o localStorage
-}
-
-loadExercises();
-</script>

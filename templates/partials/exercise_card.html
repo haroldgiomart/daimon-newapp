@@ -5,18 +5,18 @@
 
   <div class="exercise-image">
     <img src="{{ exercise.img_static }}" alt="{{ exercise.name }}">
-
-    <!-- Botón favorito -->
-    <button
-      type="button"
-      class="exercise-favorite {% if exercise.is_favorite %}active{% endif %}"
-      data-id="{{ exercise.id }}"
-      onclick="toggleFavorite(event, this)"
-      aria-label="Agregar a favoritos"
-    >
-      <i class="{% if exercise.is_favorite %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
-    </button>
   </div>
+
+  <!-- BOTÓN FAVORITO -->
+  <button
+    type="button"
+    class="exercise-favorite {% if exercise.id|string in favoritos %}active{% endif %}"
+    data-id="{{ exercise.id }}"
+    data-type="exercise"
+    onclick="toggleFavorite(event, this)"
+  >
+    <i class="fa-solid fa-heart"></i>
+  </button>
 
   <div class="exercise-body">
 
@@ -27,10 +27,11 @@
     <div class="exercise-tags">
       <span class="tag main">{{ exercise.target }}</span>
 
-      {% for muscle in exercise.secondaryMuscles %}
+      {% for muscle in exercise.secondaryMuscles[:3] %}
         <span class="tag">{{ muscle }}</span>
       {% endfor %}
     </div>
 
   </div>
+
 </div>
