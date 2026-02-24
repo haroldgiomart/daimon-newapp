@@ -274,12 +274,7 @@ def get_routine(user_id, year_week, day_number):
     return day_data
 
 
-def complete_exercise(
-    user_id: str,
-    year_week: str,
-    day_number: int,
-    exercise_order: int
-) -> dict:
+def complete_exercise(user_id: str,year_week: str,day_number: int,exercise_order: int) -> dict:
 
     try:
 
@@ -290,6 +285,7 @@ def complete_exercise(
 
         day_index = day_number - 1
         exercise_index = exercise_order - 1
+        print(f"day_index: {day_index}, day_number: {exercise_index}, year_week: {year_week}")
 
         # --------------------------------------------------
         # 1️⃣ Marcar ejercicio como completed
@@ -299,7 +295,7 @@ def complete_exercise(
             routines[{day_index}].exercises[{exercise_index}].completed_at = :now
         """
 
-        table.update_item(
+        response = table.update_item(
             Key={
                 "user_id": user_id,
                 "year_week": year_week
@@ -314,11 +310,11 @@ def complete_exercise(
             }
         )
 
+
         # --------------------------------------------------
         # 2️⃣ Revisar si el día quedó completo
         # --------------------------------------------------
         check_and_complete_day(
-            table,
             user_id,
             year_week,
             day_index,
@@ -329,7 +325,6 @@ def complete_exercise(
         # 3️⃣ Revisar si la rutina completa quedó terminada
         # --------------------------------------------------
         check_and_complete_routine(
-            table,
             user_id,
             year_week,
             now

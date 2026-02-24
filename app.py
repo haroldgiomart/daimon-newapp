@@ -464,7 +464,8 @@ def view_routine_day(user_id, year_week, day_number):
 
     return render_template(
         "routine_workout.html",
-        day_data=day_data
+        day_data=day_data,
+        year_week=year_week
     )
 
 @app.route("/complete-exercise", methods=["POST"])
