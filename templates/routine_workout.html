@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Rutina Día {{ day_data.day_number }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/routine_workout.css') }}">
+</head>
+
+<body>
+
+<div class="workout-container">
+
+  {% if day_data and day_data.exercises %}
+
+  {% set exercises = day_data.exercises|sort(attribute='order') %}
+  {% set current_index = request.args.get('i', 0) | int %}
+  {% set exercise = exercises[current_index] %}
+
+  <form method="GET" id="workout-form">
+
+    <!-- HEADER -->
+    <div class="workout-header">
+      <a href="{{ url_for('mis_rutinas') }}" class="back-link">← Rutinas</a>
+      <h2>Día {{ day_data.day_number }}</h2>
+    </div>
+
+    <!-- PROGRESO -->
+    <div class="progress-wrapper">
+      <span>Progreso {{ current_index + 1 }}/{{ exercises|length }}</span>
+      <div class="progress-bar">
+        <div class="progress-fill"
+             style="width: {{ ((current_index + 1) / exercises|length) * 100 }}%;"></div>
+      </div>
+    </div>
+
+    <!-- MEDIA -->
+    <div class="exercise-media">
+      <img src="{{ exercise.img_animated }}" alt="{{ exercise.name }}">
+    </div>
+
+    <!-- INFO -->
+    <div class="exercise-main-info">
+      <h3>{{ exercise.name|capitalize }}</h3>
+
+      <p class="exercise-meta">
+        {{ exercise.bodyPart|capitalize }} · {{ exercise.exerciseType|capitalize }}
+      </p>
+
+      <div class="exercise-prescription">
+        <span>{{ exercise.prescription.sets }} series</span>
+        <span>{{ exercise.prescription.reps }} reps</span>
+        <span>Intensidad {{ exercise.prescription.intensity_percent }}%</span>
+      </div>
+    </div>
+
+    <!-- ACORDEONES -->
+    <div class="accordion">
+
+      <details>
+        <summary>Instrucciones</summary>
+        <ul>
+          {% for step in exercise.instructions %}
+          <li>{{ step }}</li>
+          {% endfor %}
+        </ul>
+      </details>
+
+      {% if exercise.exerciseBenefit %}
+      <details>
+        <summary>Beneficios</summary>
+        <ul>
+          {% for benefit in exercise.exerciseBenefit %}
+          <li>{{ benefit }}</li>
+          {% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+
+    </div>
+
+    <input type="hidden" name="i" id="exercise-index" value="{{ current_index }}">
+
+    <!-- ACTIONS -->
+    <div class="exercise-actions">
+
+      <!-- DISLIKE -->
+      <button
+        type="button"
+        class="btn-secondary dislike-btn"
+        data-exercise-id="{{ exercise.exercise_id }}">
+        No me gustó
+      </button>
+
+      <!-- FAVORITO -->
+      <button
+        type="button"
+        class="btn-secondary favorite-btn"
+        data-exercise-id="{{ exercise.exercise_id }}">
+        Favorito
+      </button>
+
+      {% if current_index + 1 < exercises|length %}
+
+        <button type="button"
+                class="btn-primary"
+                id="btn-next"
+                data-year-week="{{ year_week }}"
+                data-day-number="{{ day_data.day_number }}"
+                data-exercise-order="{{ exercise.order }}">
+          Finalizar Ejercicio
+        </button>
+
+
+
+
+
+      {% else %}
+        <button type="button"
+                class="btn-primary"
+                id="btn-finish"
+                data-redirect="{{ url_for('mis_rutinas') }}">
+          Finalizar Rutina
+        </button>
+      {% endif %}
+
+    </div>
+
+  </form>
+
+  {% endif %}
+
+</div>
+
+<script src="{{ url_for('static', filename='js/routine_workout.js') }}"></script>
+
+</body>
+</html>

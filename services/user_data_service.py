@@ -65,6 +65,44 @@ def remove_favorite(user_id, item_id, item_type):
         }
     )
 
+
+def add_disliked(user_id, item_id, item_type):
+
+    dynamodb = get_dynamodb_table()
+    table = dynamodb.Table("daimon_user_data")
+
+    # 1️⃣ Eliminar favorito si existe (regla: no puede ser favorite y disliked al mismo tiempo)
+    table.delete_item(
+        Key={
+            "PK": f"USER#{user_id}",
+            "SK": f"FAVORITE#{item_type.upper()}#{item_id}"
+        }
+    )
+
+    # 2️⃣ Agregar disliked
+    table.put_item(
+        Item={
+            "PK": f"USER#{user_id}",
+            "SK": f"DISLIKED#{item_type.upper()}#{item_id}",
+            "item_id": item_id,
+            "entity_type": item_type,
+            "created_at": int(time.time())
+        }
+    )
+
+
+def remove_disliked(user_id, item_id, item_type):
+
+    dynamodb = get_dynamodb_table()
+    table = dynamodb.Table("daimon_user_data")
+
+    table.delete_item(
+        Key={
+            "PK": f"USER#{user_id}",
+            "SK": f"DISLIKED#{item_type.upper()}#{item_id}"
+        }
+    )
+
 def get_user_items(user_id):
     dynamodb = get_dynamodb_table()
     table = dynamodb.Table("daimon_user_data")

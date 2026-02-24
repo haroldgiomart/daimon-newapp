@@ -36,6 +36,10 @@ from services.user_data_service import (
     get_user_favorites
 )
 
+from services.user_data_service import add_disliked, remove_disliked
+from services.exercise_profile import get_exercise_profile, save_exercise_profile
+from services.save_routines_services import generate_routine, get_routines_by_status, get_routine, complete_exercise
+
 # ---------------------------------------------------------
 # App configuration
 # ---------------------------------------------------------
@@ -216,7 +220,6 @@ def survey():
 # ---------------------------------------------------------
 # Toggle Favorite (ARQUITECTURA CORRECTA)
 # ---------------------------------------------------------
-
 @app.route("/toggle-favorite", methods=["POST"])
 def toggle_favorite():
 
@@ -251,6 +254,46 @@ def toggle_favorite():
         logger.exception("Error toggling favorite")
         return jsonify({"error": "Server error"}), 500
 
+# ---------------------------------------------------------
+# Toggle Dislike (ARQUITECTURA CORRECTA)
+# ---------------------------------------------------------
+@app.route("/toggle-dislike", methods=["POST"])
+def toggle_dislike():
+
+    user_id = get_current_user_id()
+
+    data = request.json
+
+    if not data:
+        return jsonify({"error": "No JSON"}), 400
+
+    item_id = data.get("item_id")
+    is_active = data.get("is_active")
+
+    # 🔥 Validación correcta
+    if item_id is None or is_active is None:
+        return jsonify({"error": "Missing data"}), 400
+
+    try:
+        if is_active:
+            add_disliked(
+                user_id=user_id,
+                item_id=item_id,
+                item_type="exercise"
+            )
+        else:
+            remove_disliked(
+                user_id=user_id,
+                item_id=item_id,
+                item_type="exercise"
+            )
+
+        return jsonify({"success": True})
+
+    except Exception as error:
+        print(f"Error toggle dislike: {error}")
+        logger.exception("Error toggling dislike")
+        return jsonify({"error": "Server error"}), 500
 
 # ---------------------------------------------------------
 # Cupones
@@ -331,16 +374,28 @@ def beneficio_redimir(benefit_id):
 
 @app.route("/ejercicios")
 def ejercicios():
+    user_id = get_current_user_id()
+
+    profile = None
+    if user_id:
+        profile = get_exercise_profile(user_id)
+        print(f"Exercise Profile: {profile}")
+
+    show_survey = profile is None
+
     data = all_items()
 
-    user_id = get_current_user_id()
-    favorites = get_user_favorites(user_id, item_type="exercise")
+    favorites = []
+    if user_id:
+        favorites = get_user_favorites(user_id, item_type="exercise")
+
     favorite_ids = [item["item_id"] for item in favorites]
 
     return render_template(
         "ejercicios.html",
         exercises_by_target=data,
-        favoritos=favorite_ids
+        favoritos=favorite_ids,
+        show_survey=show_survey
     )
 
 
@@ -357,6 +412,74 @@ def exercise_detail(exercise_id):
         exercise=exercise
     )
 
+@app.route("/exercise-entry")
+def exercise_entry():
+    return render_template("exercises_entry.html")
+@app.route("/exercise-survey")
+def exercise_survey():
+    return render_template("exercise_survey.html")
+
+@app.route("/exercise-survey/", methods=["POST"])
+def save_exercise_survey():
+
+    user_id = get_current_user_id()
+
+    user_data = {
+        "user_id": user_id,
+        "goal": request.form.get("goal"),
+        "level": request.form.get("level"),
+        "duration": request.form.get("duration"),
+        "location": request.form.get("location"),
+        "focus": request.form.get("focus"),
+        "injury": request.form.get("injury"),
+    }
+
+    save_exercise_profile(user_id, user_data)
+    routine = generate_routine(user_data)
+    print(f"La rutina generada es: {routine}")
+
+
+    return redirect("/ejercicios")
+
+@app.route("/mis-rutinas")
+def mis_rutinas():
+
+    user_id = get_current_user_id()
+    routine = get_routines_by_status(user_id, "ACTIVE")
+
+    #progress_percentage = calculate_progress(routine)
+
+    return render_template(
+        "routines.html",
+        routine=routine
+        #progress_percentage=progress_percentage
+    )
+
+
+@app.route("/routine/<user_id>/<year_week>/<int:day_number>")
+def view_routine_day(user_id, year_week, day_number):
+
+    day_data = get_routine(user_id, year_week, day_number)
+    print(f"Rutina Diaria: {day_data}")
+
+    return render_template(
+        "routine_workout.html",
+        day_data=day_data
+    )
+
+@app.route("/complete-exercise", methods=["POST"])
+def complete_exercise_endpoint():
+
+    data = request.get_json()
+
+    result = complete_exercise(
+        user_id = get_current_user_id(),
+        year_week=data["year_week"],
+        day_number=data["day_number"],
+        exercise_order=data["exercise_order"]
+    )
+
+    return jsonify(result)
 
 # ---------------------------------------------------------
 # Videos

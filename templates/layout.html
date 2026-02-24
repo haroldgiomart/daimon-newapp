@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Daimon</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Google Analytics GA4 -->
@@ -15,14 +14,18 @@
     gtag('config', 'G-6CEGE34ZBP');
   </script>
 
-  <!-- CSS principal -->
+  <!-- CSS GLOBAL -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+
+
+  <!-- CSS específico por página -->
+  {% block page_css %}{% endblock %}
 </head>
 
 <body>
 
-  <!-- TOP BAR / HEADER -->
   {% include "partials/topbar.html" %}
 
   <!-- CONTENIDO PRINCIPAL -->
@@ -30,13 +33,17 @@
     {% block content %}{% endblock %}
   </main>
 
+  <!-- 🔥 MODALES (FUERA DEL MAIN PARA EVITAR COMPRESIÓN) -->
+  {% block page_modals %}{% endblock %}
+
   <!-- JS GLOBAL -->
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   <script src="{{ url_for('static', filename='js/matrix-scroll-fix.js') }}"></script>
-
-  <!-- JS ejercicios -->
   <script src="{{ url_for('static', filename='js/exercises.js') }}"></script>
   <script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
+
+  <!-- JS específico por página -->
+  {% block page_js %}{% endblock %}
 
 </body>
 </html>

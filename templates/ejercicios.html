@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exercise-survey.css') }}">
+{% endblock %}
+
 {% block content %}
 
 {% for target, exercises in exercises_by_target.items() %}
@@ -14,4 +18,14 @@
 </section>
 {% endfor %}
 
+{% endblock %}
+
+{% block page_modals %}
+  {% if show_survey %}
+    {% include "partials/exercise_survey.html" %}
+  {% endif %}
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='js/exercise-survey.js') }}"></script>
 {% endblock %}

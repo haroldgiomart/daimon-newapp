@@ -106,6 +106,17 @@ section h2 {
   paddingm: 4px 0 8px 0;
   padding-left: 16px;
   padding-right: 16px;
+
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cards::-webkit-scrollbar {
+  display: none;                  /* Chrome, Safari */
 }
 
 .card {
@@ -136,6 +147,7 @@ section h2 {
 /* ===== Botón favorito (Daimon style) ===== */
 .card-container {
   position: relative;
+  scroll-snap-align: start;
 }
 
 .fav-btn {
@@ -1578,4 +1590,114 @@ section h3 {
 .favorite-btn:hover {
   transform: scale(1.08);
   transition: 0.2s ease;
+}
+
+/* ========================= */
+/* DAIMON PREMIUM CARDS */
+/* ========================= */
+
+.routines-ntc {
+    padding: 50px 60px;
+}
+
+.routines-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #421CA6;
+}
+
+/* GRID */
+
+.routines-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 28px;
+}
+
+/* CARD BASE */
+
+.ntc-card {
+    background: #2E1A5E;
+    color: white;
+    padding: 30px;
+    border-radius: 26px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* HOVER EFFECT */
+
+.ntc-card:hover {
+    background: #421CA6;
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.15);
+}
+
+/* HEADER */
+
+.ntc-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ICON */
+
+.ntc-icon {
+    font-size: 28px;
+    color: #FFC700; /* Amarillo Daimon */
+}
+
+/* DAY */
+
+.ntc-day {
+    font-weight: 500;
+    letter-spacing: 1px;
+    opacity: 0.95;
+}
+
+/* TYPE */
+
+.ntc-type {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 25px;
+    letter-spacing: 1px;
+}
+
+/* STATUS */
+
+.ntc-status {
+    margin-top: 30px;
+}
+
+.ntc-tag {
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* STATUS COLORS */
+
+.pending {
+    background: rgba(255, 199, 0, 0.12);
+    color: #FFC700;
+}
+
+.progress {
+    background: rgba(108, 92, 231, 0.15);
+    color: #6c5ce7;
+}
+
+.completed {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
 }

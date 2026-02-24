@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<section class="routines-ntc">
+
+  <div class="routines-header">
+    <h2>Mis Rutinas</h2>
+  </div>
+
+  {% if routine and routine.routines %}
+
+  <div class="routines-grid">
+
+    {% for day in routine.routines %}
+    <a href="{{ url_for('view_routine_day',
+                        user_id=routine.user_id,
+                        year_week=routine.year_week,
+                        day_number=day.day_number) }}"
+       class="ntc-card {{ day.type }}">
+
+      <div class="ntc-card-top">
+        <div class="ntc-icon">
+          {% if day.type == "metabolic" %}
+            <i class="fa-solid fa-bolt"></i>
+          {% elif day.type == "focus" %}
+            <i class="fa-solid fa-dumbbell"></i>
+          {% elif day.type == "compensation" %}
+            <i class="fa-solid fa-heart-pulse"></i>
+          {% else %}
+            <i class="fa-solid fa-person-running"></i>
+          {% endif %}
+        </div>
+
+        <div class="ntc-day">
+          DÍA {{ day.day_number }}
+        </div>
+      </div>
+
+      <div class="ntc-type">
+        {{ day.type|upper }}
+      </div>
+
+      <div class="ntc-status">
+        {% if day.status == "pending" %}
+          <span class="ntc-tag pending">Pendiente</span>
+        {% elif day.status == "in_progress" %}
+          <span class="ntc-tag progress">En progreso</span>
+        {% elif day.status == "completed" %}
+          <span class="ntc-tag completed">Completado</span>
+        {% endif %}
+      </div>
+
+    </a>
+    {% endfor %}
+
+  </div>
+
+  {% else %}
+
+    <div class="empty-state">
+      <p>No tienes rutinas activas.</p>
+    </div>
+
+  {% endif %}
+
+</section>
+
+{% endblock %}

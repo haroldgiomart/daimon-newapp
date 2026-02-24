@@ -12,8 +12,7 @@
     type="button"
     class="exercise-favorite {% if exercise.id|string in favoritos %}active{% endif %}"
     data-id="{{ exercise.id }}"
-    data-type="exercise"
-    onclick="toggleFavorite(event, this)"
+    onclick="toggleFavorite(event)"
   >
     <i class="fa-solid fa-heart"></i>
   </button>
