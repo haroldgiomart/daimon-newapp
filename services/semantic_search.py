@@ -4,15 +4,10 @@ from services.pinecone_client import index  # o donde tengas el index
 
 def semantic_intent_search(intent, user_profile_text, user_tags):
 
-    query_text = f"""
-    Intención del usuario: {intent}
-    Perfil del usuario: {user_profile_text}
-    Preferencias: {', '.join(user_tags)}
-    Contexto: recomendar beneficios relevantes y útiles
-    """
+    print(f"El intento es: {intent}")
 
     # 🔹 TEXTO → EMBEDDING
-    embedding = embed_text(query_text)
+    embedding = embed_text(intent)
 
     # 🔹 EMBEDDING → PINECONE
     pinecone_results = index.query(
