@@ -403,6 +403,7 @@ def ejercicios():
 def exercise_detail(exercise_id):
 
     exercise = get_exercise_by_id(exercise_id)
+    print(f"Exercise Detail: {exercise}")
 
     if not exercise:
         return render_template("404.html"), 404

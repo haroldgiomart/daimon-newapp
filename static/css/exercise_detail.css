@@ -1,63 +1,145 @@
+/* ============================= */
+/* BASE */
+/* ============================= */
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f6f7f9;
     margin: 0;
-    padding: 24px;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+    background: #f8f9fc;
+    color: #1c1c1e;
 }
 
-.exercise-container {
-    max-width: 900px;
-    margin: auto;
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 32px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+/* ============================= */
+/* CONTAINER */
+/* ============================= */
+
+.workout-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.exercise-header {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 32px;
-    align-items: center;
-}
+/* ============================= */
+/* HEADER */
+/* ============================= */
 
-.exercise-header img {
-    width: 100%;
-    background: #ffffff;
-    border-radius: 12px;
-}
-
-.exercise-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.exercise-meta {
+.workout-header {
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.badge {
-    background: #eef2ff;
-    color: #3730a3;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 14px;
+.back-link {
+    text-decoration: none;
+    color: #6c5ce7;
     font-weight: 500;
 }
 
-.section {
-    margin-top: 32px;
+/* ============================= */
+/* MEDIA */
+/* ============================= */
+
+.exercise-media {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,.05);
+    margin-bottom: 20px;
 }
 
-.section h3 {
+.exercise-media img {
+    max-width: 100%;
+    border-radius: 14px;
+}
+
+/* ============================= */
+/* MAIN INFO */
+/* ============================= */
+
+.exercise-main-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 22px;
+}
+
+.exercise-meta {
+    font-size: 14px;
+    color: #3B6CFF;
     margin-bottom: 12px;
-    font-size: 20px;
 }
 
-.instructions li {
+.exercise-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: #FDBA2D;
+    color: #FFFFFF;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+/* ============================= */
+/* ACCORDION */
+/* ============================= */
+
+.accordion details {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 12px;
     margin-bottom: 10px;
-    line-height: 1.6;
+    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+}
+
+.accordion summary {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.accordion ul {
+    margin: 10px 0 0 16px;
+    padding: 0;
+    font-size: 14px;
+    color: #444;
+}
+
+/* ============================= */
+/* BUTTON */
+/* ============================= */
+
+.exercise-actions {
+    margin-top: 25px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    background:#EDEDED;
+    color: #5B2BE0;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(108, 92, 231, 0.25);
+}
+
+.favorite-btn.active {
+    background: #5B2BE0;
+    color: white;
 }
