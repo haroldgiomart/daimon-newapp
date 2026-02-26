@@ -295,6 +295,8 @@ def complete_exercise(user_id: str,year_week: str,day_number: int,exercise_order
             routines[{day_index}].exercises[{exercise_index}].completed_at = :now
         """
 
+        print(f"Update Expression: {update_expression}")
+
         response = table.update_item(
             Key={
                 "user_id": user_id,
@@ -310,6 +312,7 @@ def complete_exercise(user_id: str,year_week: str,day_number: int,exercise_order
             }
         )
 
+        print(f"Response: {response}")
 
         # --------------------------------------------------
         # 2️⃣ Revisar si el día quedó completo
@@ -324,7 +327,7 @@ def complete_exercise(user_id: str,year_week: str,day_number: int,exercise_order
         # --------------------------------------------------
         # 3️⃣ Revisar si la rutina completa quedó terminada
         # --------------------------------------------------
-        check_and_complete_routine(
+        update_routine_progress(
             user_id,
             year_week,
             now
@@ -336,12 +339,7 @@ def complete_exercise(user_id: str,year_week: str,day_number: int,exercise_order
         print(f"Comple Exercise: {Error}")
 
 
-def check_and_complete_day(
-    user_id: str,
-    year_week: str,
-    day_index: int,
-    now: str
-):
+def check_and_complete_day(user_id: str,year_week: str,day_index: int,now: str):
     try:
         dynamodb = get_dynamodb_table()
         table = dynamodb.Table("daimon_exercise_routines")
@@ -394,11 +392,7 @@ def check_and_complete_day(
     except Exception as Error:
         print(f"check_and_complete_day Error: {Error}")
 
-def check_and_complete_routine(
-    user_id: str,
-    year_week: str,
-    now: str
-):
+def check_and_complete_routine(user_id: str,year_week: str,now: str):
     dynamodb = get_dynamodb_table()
     table = dynamodb.Table("daimon_exercise_routines")
 
@@ -447,6 +441,71 @@ def check_and_complete_routine(
     except Exception as Error:
         print(f"check_and_complete_routine Error: {Error}")
 
+def update_routine_progress(
+    user_id: str,
+    year_week: str,
+    now: str
+):
+    dynamodb = get_dynamodb_table()
+    table = dynamodb.Table("daimon_exercise_routines")
+
+    try:
+        response = table.get_item(
+            Key={
+                "user_id": user_id,
+                "year_week": year_week
+            }
+        )
+
+        item = response.get("Item")
+        if not item:
+            return
+
+        total_exercises = 0
+        completed_exercises = 0
+
+        for day in item["routines"]:
+            for ex in day["exercises"]:
+                total_exercises += 1
+                if ex.get("status") == "completed":
+                    completed_exercises += 1
+
+        progress = int((completed_exercises / total_exercises) * 100) if total_exercises > 0 else 0
+
+        # --------------------------------------------------
+        # Construcción dinámica del update
+        # --------------------------------------------------
+
+        update_expression = "SET progress_percentage = :progress"
+        expression_values = {
+            ":progress": progress
+        }
+
+        expression_names = {}
+
+        # Si llegó a 100 → marcar rutina como COMPLETED
+        if progress == 100:
+            update_expression += ", #sr = :completed, completed_at = :now"
+            expression_values[":completed"] = "COMPLETED"
+            expression_values[":now"] = now
+            expression_names["#sr"] = "status_routine"
+
+        update_params = {
+            "Key": {
+                "user_id": user_id,
+                "year_week": year_week
+            },
+            "UpdateExpression": update_expression,
+            "ExpressionAttributeValues": expression_values
+        }
+
+        if expression_names:
+            update_params["ExpressionAttributeNames"] = expression_names
+
+        table.update_item(**update_params)
+
+    except Exception as Error:
+        print(f"update_routine_progress Error: {Error}")
 
 if __name__ == '__main__':
     #response = get_routines_by_status("e306fbfa-3d2e-488b-8e59-b58ed5c7485e", "ACTIVE")

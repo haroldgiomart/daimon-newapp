@@ -41,13 +41,24 @@
         {{ day.type|upper }}
       </div>
 
+      <!-- 🔥 NUEVO BLOQUE PROGRESO -->
+      <div class="ntc-progress-wrapper">
+        <div class="ntc-progress-bar">
+          <div class="ntc-progress-fill"
+               style="width: {{ day.progress_percentage }}%;"></div>
+        </div>
+        <div class="ntc-progress-text">
+          {{ day.progress_percentage }}%
+        </div>
+      </div>
+
       <div class="ntc-status">
-        {% if day.status == "pending" %}
-          <span class="ntc-tag pending">Pendiente</span>
-        {% elif day.status == "in_progress" %}
-          <span class="ntc-tag progress">En progreso</span>
-        {% elif day.status == "completed" %}
+        {% if day.progress_percentage == 100 %}
           <span class="ntc-tag completed">Completado</span>
+        {% elif day.progress_percentage > 0 %}
+          <span class="ntc-tag progress">En progreso</span>
+        {% else %}
+          <span class="ntc-tag pending">Pendiente</span>
         {% endif %}
       </div>
 

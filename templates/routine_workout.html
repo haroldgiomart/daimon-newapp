@@ -14,8 +14,7 @@
 
   {% if day_data and day_data.exercises %}
 
-  {% set exercises = day_data.exercises|sort(attribute='order') %}
-  {% set current_index = request.args.get('i', 0) | int %}
+  {% set exercises = day_data.exercises %}
   {% set exercise = exercises[current_index] %}
 
   <form method="GET" id="workout-form">
@@ -31,7 +30,8 @@
       <span>Progreso {{ current_index + 1 }}/{{ exercises|length }}</span>
       <div class="progress-bar">
         <div class="progress-fill"
-             style="width: {{ ((current_index + 1) / exercises|length) * 100 }}%;"></div>
+             style="width: {{ ((current_index + 1) / exercises|length) * 100 }}%;">
+        </div>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
       <img src="{{ exercise.img_animated }}" alt="{{ exercise.name }}">
     </div>
 
-    <!-- INFO -->
+    <!-- INFO PRINCIPAL -->
     <div class="exercise-main-info">
       <h3>{{ exercise.name|capitalize }}</h3>
 
@@ -80,12 +80,13 @@
 
     </div>
 
+    <!-- INPUT OCULTO -->
     <input type="hidden" name="i" id="exercise-index" value="{{ current_index }}">
 
-    <!-- ACTIONS -->
+    <!-- ACCIONES -->
     <div class="exercise-actions">
 
-      <!-- DISLIKE -->
+      <!-- NO ME GUSTÓ -->
       <button
         type="button"
         class="btn-secondary dislike-btn"
@@ -101,7 +102,8 @@
         Favorito
       </button>
 
-      {% if current_index + 1 < exercises|length %}
+      <!-- BOTÓN PRINCIPAL -->
+      {% if not all_completed %}
 
         <button type="button"
                 class="btn-primary"
@@ -112,22 +114,28 @@
           Finalizar Ejercicio
         </button>
 
-
-
-
-
       {% else %}
+
         <button type="button"
                 class="btn-primary"
-                id="btn-finish"
-                data-redirect="{{ url_for('mis_rutinas') }}">
-          Finalizar Rutina
+                disabled>
+          Rutina Completa
         </button>
+
       {% endif %}
 
     </div>
 
   </form>
+
+  {% else %}
+
+    <div class="no-routine">
+      <p>No hay ejercicios disponibles para este día.</p>
+      <a href="{{ url_for('mis_rutinas') }}" class="btn-primary">
+        Volver a Rutinas
+      </a>
+    </div>
 
   {% endif %}
 

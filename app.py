@@ -448,25 +448,79 @@ def mis_rutinas():
     user_id = get_current_user_id()
     routine = get_routines_by_status(user_id, "ACTIVE")
 
-    #progress_percentage = calculate_progress(routine)
+    if routine and "routines" in routine:
+        for day in routine["routines"]:
+            total = len(day.get("exercises", []))
+            completed = sum(
+                1 for ex in day.get("exercises", [])
+                if ex.get("status") == "completed"
+            )
+
+            if total > 0:
+                day["progress_percentage"] = int((completed / total) * 100)
+            else:
+                day["progress_percentage"] = 0
 
     return render_template(
         "routines.html",
         routine=routine
-        #progress_percentage=progress_percentage
     )
-
 
 @app.route("/routine/<user_id>/<year_week>/<int:day_number>")
 def view_routine_day(user_id, year_week, day_number):
 
     day_data = get_routine(user_id, year_week, day_number)
-    print(f"Rutina Diaria: {day_data}")
 
+    if not day_data or not day_data.get("exercises"):
+        return render_template(
+            "routine_workout.html",
+            day_data=None,
+            year_week=year_week
+        )
+
+    # 1 Ordenar ejercicios
+    exercises = sorted(day_data["exercises"], key=lambda x: x["order"])
+    day_data["exercises"] = exercises
+
+    # 2 Encontrar primer ejercicio no completado
+    current_index = next(
+        (i for i, ex in enumerate(exercises) if ex.get("status") != "completed"),
+        len(exercises) - 1
+    )
+
+    # 3 Verificar si todos están completados
+    all_completed = all(
+        ex.get("status") == "completed" for ex in exercises
+    )
+
+    #  Si la rutina está completa se muesta routine_completed
+    if all_completed:
+
+        total_exercises = len(exercises)
+        total_sets = sum(ex["prescription"]["sets"] for ex in exercises)
+        total_reps = sum(ex["prescription"]["reps"] for ex in exercises)
+
+        avg_intensity = round(
+            sum(ex["prescription"]["intensity_percent"] for ex in exercises)
+            / total_exercises
+        )
+
+        return render_template(
+            "routine_completed.html",
+            day_data=day_data,
+            total_exercises=total_exercises,
+            total_sets=total_sets,
+            total_reps=total_reps,
+            avg_intensity=avg_intensity
+        )
+
+    # Si no está completa entonces se muestra la rutina normal
     return render_template(
         "routine_workout.html",
         day_data=day_data,
-        year_week=year_week
+        year_week=year_week,
+        current_index=current_index,
+        all_completed=all_completed
     )
 
 @app.route("/complete-exercise", methods=["POST"])
