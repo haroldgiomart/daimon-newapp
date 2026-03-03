@@ -1,3 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encuesta de Rutina</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/static/css/exercise-survey.css">
+
+  <!-- FontAwesome (si usas iconos) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
 <div id="exerciseSurveyModal" class="survey-modal active">
 
   <div class="survey-overlay"></div>
@@ -14,14 +31,17 @@
       <span class="dot"></span>
     </div>
 
-    <form id="exerciseSurveyForm" class="survey-content">
+    <form id="exerciseSurveyForm"
+          class="survey-content"
+          method="POST"
+          action="/exercise-survey/">
 
       <!-- STEP 1 -->
       <div class="step active">
         <h2>¿Cuál es tu objetivo principal?</h2>
 
         <label class="option">
-          <input type="radio" name="goal" value="ganar_musculo">
+          <input type="radio" name="goal" value="ganar_musculo" required>
           <span>Ganar músculo</span>
         </label>
 
@@ -76,7 +96,7 @@
         </label>
 
         <label class="option">
-          <input type="radio" name="duration" value="60">
+          <input type="radio" name="duration" value="45">
           <span>45 min</span>
         </label>
 
@@ -147,7 +167,7 @@
 
         <label class="option">
           <input type="radio" name="level" value="medio">
-          <span>Intetrmedio</span>
+          <span>Intermedio</span>
         </label>
 
         <label class="option">
@@ -160,8 +180,14 @@
 
     <!-- Footer -->
     <div class="survey-footer">
-      <a href="#" id="skipSurvey">Saltar encuesta</a>
+      <a href="/mis-rutinas" id="skipSurvey">Saltar encuesta</a>
     </div>
 
   </div>
 </div>
+
+<!-- JS -->
+<script src="/static/js/exercise-survey.js"></script>
+
+</body>
+</html>

@@ -3,6 +3,7 @@ import time
 import os
 from boto3.dynamodb.conditions import Key
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -132,3 +133,27 @@ def get_user_favorites(user_id, item_type=None):
     )
 
     return response.get("Items", [])
+
+def create_user_if_not_exists(user_id, email, first_name, last_name, image_url):
+
+    dynamodb = get_dynamodb_table()
+    table = dynamodb.Table("daimon_users")
+
+    response = table.get_item(
+        Key={"user_id": user_id}
+    )
+
+    if "Item" in response:
+        return
+
+    table.put_item(
+        Item={
+            "user_id": user_id,
+            "email": email,
+            "first_name": first_name,
+            "last_name": last_name,
+            "created_at": datetime.utcnow().isoformat(),
+            "plan": "FREE",
+            "image_url": image_url
+        }
+    )

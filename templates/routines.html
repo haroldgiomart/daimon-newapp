@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exercise-survey.css') }}">
+{% endblock %}
+
 {% block content %}
 
 <section class="routines-ntc">
@@ -19,6 +23,7 @@
                         day_number=day.day_number) }}"
        class="ntc-card {{ day.type }}">
 
+      <!-- TOP -->
       <div class="ntc-card-top">
         <div class="ntc-icon">
           {% if day.type == "metabolic" %}
@@ -37,11 +42,12 @@
         </div>
       </div>
 
+      <!-- TYPE -->
       <div class="ntc-type">
         {{ day.type|upper }}
       </div>
 
-      <!-- 🔥 NUEVO BLOQUE PROGRESO -->
+      <!-- PROGRESS -->
       <div class="ntc-progress-wrapper">
         <div class="ntc-progress-bar">
           <div class="ntc-progress-fill"
@@ -52,6 +58,7 @@
         </div>
       </div>
 
+      <!-- STATUS -->
       <div class="ntc-status">
         {% if day.progress_percentage == 100 %}
           <span class="ntc-tag completed">Completado</span>
@@ -69,12 +76,44 @@
 
   {% else %}
 
-    <div class="empty-state">
-      <p>No tienes rutinas activas.</p>
-    </div>
+  <!-- GENERAR RUTINA CARD -->
+  <div class="routines-grid">
+
+    <a href="/exercise-survey"
+       class="ntc-card generate-card">
+
+      <div class="ntc-card-top">
+        <div class="ntc-icon">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+
+        <div class="ntc-day">
+          NUEVA
+        </div>
+      </div>
+
+      <div class="ntc-type">
+        GENERAR RUTINA
+      </div>
+
+      <div class="ntc-description">
+        Responde unas preguntas rápidas y crea tu plan personalizado.
+      </div>
+
+      <div class="ntc-status">
+        <span class="ntc-tag generate">Comenzar</span>
+      </div>
+
+    </a>
+
+  </div>
 
   {% endif %}
 
 </section>
 
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='js/exercise-survey.js') }}"></script>
 {% endblock %}

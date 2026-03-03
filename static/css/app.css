@@ -16,18 +16,20 @@ body {
 /* ================= HEADER ================= */
 
 .topbar {
-  background: #5b2eff;
-  padding: 12px 16px;
+  background: linear-gradient(135deg, #5b2eff, #4b1fcf);
+  color: white;
+  padding: 12px 24px 0 24px;
+
 }
 
 .topbar-container {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .topbar-left {
-  flex-shrink: 0;
+  flex: 0 0 auto;
 }
 
 .logo {
@@ -51,14 +53,25 @@ body {
 
 /* ================= CATEGORÍAS ================= */
 
-.categories {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-  overflow-x: auto;
+/* ============================= */
+/* CATEGORY NAV */
+/* ============================= */
+/* ============================= */
+/* CATEGORY NAV FIX REAL */
+/* ============================= */
 
-  justify-content: center;
-  padding-bottom: 6px;
+.categories {
+
+  gap: 12px;
+  padding: 14px 16px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  white-space: nowrap;
+
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .categories::-webkit-scrollbar {
@@ -66,20 +79,37 @@ body {
 }
 
 .categories a {
-  background: white;
-  color: #5b2eff;
-  padding: 6px 14px;
-  border-radius: 20px;
+  flex: 0 0 auto;
   text-decoration: none;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.15);
   font-size: 13px;
-  white-space: nowrap;
+  transition: 0.25s ease;
 }
 
 .categories a.active {
-  background: #5b2eff;
-  color: white;
+  background: white;
+  color: #5b2eff;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(91,46,255,0.35);
+}
+
+.categories a:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ============================= */
+/* MOBILE TWEAK */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  .categories {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
 }
 /* ================= MAIN ================= */
 
@@ -1141,11 +1171,17 @@ section h3 {
   scroll-snap-type: x mandatory;
   padding-bottom: 8px;
 
-  /* 🔒 ALTURA FIJA DEL RAIL (NO SE MUEVE NADA ABAJO) */
   height: 190px;
   align-items: center;
+
+  /* 🔥 Ocultar scrollbar en Firefox */
+  scrollbar-width: none;
+
+  /* 🔥 IE / Edge antiguo */
+  -ms-overflow-style: none;
 }
 
+/* 🔥 Chrome / Safari */
 .intent-track::-webkit-scrollbar {
   display: none;
 }
@@ -1729,4 +1765,186 @@ section h3 {
   font-size: 12px;
   margin-top: 4px;
   opacity: 0.8;
+}
+
+
+
+
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+}
+
+/* USER MENU */
+.user-menu {
+  position: relative;
+}
+
+.user-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.user-icon:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 10px 0;
+  min-width: 220px;
+  display: none;
+  opacity: 0;
+  transform: translateY(0);
+  transition: all 0.25s ease;
+  z-index: 1000;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.user-dropdown.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* ===== NAV ===== */
+.categories {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 0;
+}
+
+.categories a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.15);
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.categories a:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.categories a.active {
+  background: white;
+  color: #5f2eea;
+}
+
+/* ===== AVATAR ===== */
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.user-avatar:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.user-avatar i {
+  color: white;
+  font-size: 14px;
+}
+
+/* DROPDOWN */
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  width: 220px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  padding: 12px;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.dropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-header {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.dropdown-header span {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #eee;
+  margin: 10px 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.dropdown-item.logout {
+  color: #d64545;
+}
+.logout-btn {
+  display: block;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #333;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  background: #f8f6ff;
+  color: #5f2eea;
 }

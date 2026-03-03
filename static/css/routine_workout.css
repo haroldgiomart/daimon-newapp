@@ -201,3 +201,34 @@ body {
     transform: scale(1.05);
     transition: 0.2s ease;
 }
+
+/* ============================= */
+/* CARD COMPLETAR ENCUESTA */
+/* ============================= */
+
+.generate-card {
+  background: linear-gradient(135deg, #5b2eff, #8b5cf6);
+  color: white;
+  transition: 0.3s ease;
+}
+
+.generate-card .ntc-type {
+  font-weight: 700;
+}
+
+.generate-card .ntc-description {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 8px;
+}
+
+.generate-card .ntc-tag.generate {
+  background: white;
+  color: #5b2eff;
+  font-weight: 600;
+}
+
+.generate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(91,46,255,0.35);
+}

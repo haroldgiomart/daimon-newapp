@@ -57,23 +57,25 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // ENVIAR ENCUESTA
   // =========================
-  function submitSurvey() {
-    const formData = new FormData(form);
+    function submitSurvey() {
+      const formData = new FormData(form);
 
-    fetch("/exercise-survey/", {
-      method: "POST",
-      body: formData
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Error guardando encuesta");
-      }
-      closeSurvey();
-    })
-    .catch(error => {
-      console.error("Survey error:", error);
-    });
-  }
+      fetch("/exercise-survey/", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Error guardando encuesta");
+        }
+
+        // 🔥 Redirección manual
+        window.location.href = "/mis-rutinas";
+      })
+      .catch(error => {
+        console.error("Survey error:", error);
+      });
+    }
 
   // =========================
   // CERRAR MODAL
@@ -88,10 +90,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // BOTÓN SALTAR
   // =========================
   if (skipBtn) {
-    skipBtn.addEventListener("click", function(e) {
-      e.preventDefault();
-      closeSurvey();
-    });
-  }
+  skipBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    window.location.href = "/mis-rutinas";
+  });
+}
 
 });

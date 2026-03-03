@@ -5,7 +5,9 @@
   <title>Daimon</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Analytics GA4 -->
+  <!-- ========================= -->
+  <!-- GOOGLE ANALYTICS GA4 -->
+  <!-- ========================= -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6CEGE34ZBP"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -14,13 +16,62 @@
     gtag('config', 'G-6CEGE34ZBP');
   </script>
 
+  <!-- ========================= -->
+  <!-- CLERK -->
+  <!-- ========================= -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_ZW5nYWdpbmctb3N0cmljaC05LmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
+  </script>
+
+  <script>
+    window.addEventListener("load", async function () {
+      await Clerk.load();
+
+      // Si no está autenticado → redirigir a login
+      if (!Clerk.user && window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+    });
+
+    // 🔥 Función GLOBAL para enviar token al backend
+    async function getAuthHeaders() {
+      if (!window.Clerk || !Clerk.session) {
+        return {
+          "Content-Type": "application/json"
+        };
+      }
+
+      const token = await Clerk.session.getToken();
+
+      return {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      };
+    }
+  </script>
+
+  <!-- ========================= -->
+  <!-- TRAVELPAYOUTS -->
+  <!-- ========================= -->
+  <script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
+    (function () {
+        var script = document.createElement("script");
+        script.async = 1;
+        script.src = 'https://tpembars.com/NTA0MDU1.js?t=504055';
+        document.head.appendChild(script);
+    })();
+  </script>
+
+  <!-- ========================= -->
   <!-- CSS GLOBAL -->
+  <!-- ========================= -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/exercise-survey.css') }}">
 
-
-
-  <!-- CSS específico por página -->
   {% block page_css %}{% endblock %}
 </head>
 
@@ -28,21 +79,21 @@
 
   {% include "partials/topbar.html" %}
 
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="app-content">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- 🔥 MODALES (FUERA DEL MAIN PARA EVITAR COMPRESIÓN) -->
   {% block page_modals %}{% endblock %}
 
+  <!-- ========================= -->
   <!-- JS GLOBAL -->
+  <!-- ========================= -->
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   <script src="{{ url_for('static', filename='js/matrix-scroll-fix.js') }}"></script>
   <script src="{{ url_for('static', filename='js/exercises.js') }}"></script>
   <script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/exercise-survey.js') }}"></script>
 
-  <!-- JS específico por página -->
   {% block page_js %}{% endblock %}
 
 </body>

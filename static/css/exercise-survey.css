@@ -2,6 +2,10 @@
 /* 🔥 AISLAMIENTO TOTAL DEL MODAL DEL CSS GLOBAL */
 /* ===================================================== */
 
+/* ===================================================== */
+/* MODAL BASE */
+/* ===================================================== */
+
 #exerciseSurveyModal {
   position: fixed;
   inset: 0;
@@ -17,41 +21,94 @@
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* 🔥 Resetea TODO lo que venga del layout */
+/* Reset total para evitar conflictos con layout */
 #exerciseSurveyModal * {
   all: revert;
   box-sizing: border-box;
 }
 
-/* OVERLAY */
+
+/* ===================================================== */
+/* IMAGEN DE FONDO SOLO PARA ESTE MODAL */
+/* ===================================================== */
+
+#exerciseSurveyModal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: url("/static/img/fitness-bg.png") center center / cover no-repeat;
+
+  /* Opcional: un poco más cinematográfico */
+  filter: brightness(0.95);
+
+  z-index: 0;
+}
+
+
+/* ===================================================== */
+/* OVERLAY OSCURO + BLUR */
+/* ===================================================== */
+
 #exerciseSurveyModal .survey-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(6px);
+
+  background: rgba(0, 0, 0, 0.35);
+
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+
+  z-index: 1;
 }
 
-/* CAJA */
+
+/* ===================================================== */
+/* CAJA MODAL */
+/* ===================================================== */
+
 #exerciseSurveyModal .survey-box {
   position: relative;
-  z-index: 10;
+  z-index: 2;
 
-  width: 90%;
-  max-width: 480px;
-  min-height: 380px;
+  width: 92%;
+  max-width: 500px;
+  min-height: 420px;
 
-  background: #ffffff;
-  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+
+  border-radius: 28px;
 
   padding: 50px 60px 40px 60px;
 
   display: flex;
   flex-direction: column;
 
-  box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.35),
+    0 10px 30px rgba(0,0,0,0.2);
+
+  animation: modalFadeIn 0.35s ease;
 }
 
+
+/* Animación entrada suave */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* ===================================================== */
 /* STEPPER */
+/* ===================================================== */
+
 #exerciseSurveyModal .survey-steps {
   display: flex;
   justify-content: center;
@@ -69,10 +126,14 @@
 
 #exerciseSurveyModal .dot.active {
   background: #6C2BD9;
-  transform: scale(1.3);
+  transform: scale(1.4);
 }
 
+
+/* ===================================================== */
 /* CONTENIDO */
+/* ===================================================== */
+
 #exerciseSurveyModal .survey-content {
   flex: 1;
   display: flex;
@@ -80,7 +141,11 @@
   justify-content: center;
 }
 
+
+/* ===================================================== */
 /* STEPS */
+/* ===================================================== */
+
 #exerciseSurveyModal .step {
   display: none;
   width: 100%;
@@ -90,16 +155,24 @@
   display: block;
 }
 
+
+/* ===================================================== */
 /* TITULO */
+/* ===================================================== */
+
 #exerciseSurveyModal h2 {
-  font-size: 34px;
+  font-size: 32px;
   font-weight: 700;
   margin-bottom: 35px;
   line-height: 1.2;
   color: #111;
 }
 
+
+/* ===================================================== */
 /* OPCIONES */
+/* ===================================================== */
+
 #exerciseSurveyModal .option {
   display: flex;
   align-items: center;
@@ -108,13 +181,13 @@
   padding: 18px 22px;
   margin-bottom: 18px;
 
-  border-radius: 16px;
+  border-radius: 18px;
   border: 1px solid #e5e5e5;
 
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 
-  font-size: 18px;
+  font-size: 17px;
   color: #111;
   background: #fff;
 }
@@ -122,6 +195,8 @@
 #exerciseSurveyModal .option:hover {
   background: #f3f0ff;
   border-color: #6C2BD9;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(108, 43, 217, 0.12);
 }
 
 #exerciseSurveyModal .option input {
@@ -129,7 +204,11 @@
   accent-color: #6C2BD9;
 }
 
+
+/* ===================================================== */
 /* FOOTER */
+/* ===================================================== */
+
 #exerciseSurveyModal .survey-footer {
   margin-top: 30px;
   text-align: right;
@@ -139,14 +218,18 @@
 #exerciseSurveyModal .survey-footer a {
   color: #777;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 #exerciseSurveyModal .survey-footer a:hover {
   color: #000;
 }
 
-/* BLUR SOLO CONTENIDO PRINCIPAL */
-.app-content.blur-content {
-  filter: blur(4px);
-  pointer-events: none;
+
+/* ===================================================== */
+/* BLOQUEAR SCROLL CUANDO EL MODAL ESTÉ ABIERTO */
+/* ===================================================== */
+
+body.survey-open {
+  overflow: hidden;
 }
