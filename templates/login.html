@@ -12,6 +12,16 @@
     src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js">
   </script>
 
+  <script>
+    window.addEventListener("load", async function () {
+      await window.Clerk.load();
+
+      window.Clerk.mountSignIn("#clerk-container", {
+        fallbackRedirectUrl: "/home"
+      });
+    });
+  </script>
+
   <style>
     body {
       margin: 0;
