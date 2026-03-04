@@ -5,11 +5,11 @@
   <title>Login - Daimon</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Clerk -->
   <script
-    async
     crossorigin="anonymous"
     data-clerk-publishable-key="{{ clerk_publishable_key }}"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
+    src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js">
   </script>
 
   <style>
@@ -35,10 +35,10 @@
 
   <script>
     window.addEventListener("load", async function () {
-      await Clerk.load();
+      await window.Clerk.load();
 
-      Clerk.mountSignIn(document.getElementById("clerk-container"), {
-        redirectUrl: "/home"
+      window.Clerk.mountSignIn("#clerk-container", {
+        fallbackRedirectUrl: "/home"
       });
     });
   </script>
