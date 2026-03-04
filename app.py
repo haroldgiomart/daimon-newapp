@@ -73,7 +73,6 @@ clerk = Clerk(bearer_auth=os.environ["CLERK_SECRET_KEY"])
 CLERK_ISSUER = os.environ.get("CLERK_ISSUER")
 CLERK_JWKS_URL = f"{CLERK_ISSUER}/.well-known/jwks.json"
 CLERK_PUBLISHABLE_KEY= os.environ.get("CLERK_PUBLISHABLE_KEY")
-FRONT_END_API=os.environ.get("FRONT-END-API")
 
 jwks_cache = None
 clerk_user_cache = TTLCache(maxsize=1000, ttl=600)  # 10 minutos
@@ -266,8 +265,7 @@ def landing():
 def login():
     return render_template(
         "login.html",
-        clerk_publishable_key=CLERK_PUBLISHABLE_KEY,
-        front_end_api=FRONT_END_API
+        clerk_publishable_key=CLERK_PUBLISHABLE_KEY
     )
 
 # ---------------------------------------------------------
