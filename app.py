@@ -14,6 +14,7 @@ from flask import (
 
 from functools import wraps
 from jose import jwt
+from jose.exceptions import  ExpiredSignatureError, JWTError
 from cachetools import TTLCache, cached
 from dotenv import load_dotenv
 from clerk_backend_api import Clerk
@@ -72,6 +73,7 @@ clerk = Clerk(bearer_auth=os.environ["CLERK_SECRET_KEY"])
 CLERK_ISSUER = os.environ.get("CLERK_ISSUER")
 CLERK_JWKS_URL = f"{CLERK_ISSUER}/.well-known/jwks.json"
 CLERK_PUBLISHABLE_KEY= os.environ.get("CLERK_PUBLISHABLE_KEY")
+FRONT_END_API=os.environ.get("FRONT-END-API")
 
 jwks_cache = None
 clerk_user_cache = TTLCache(maxsize=1000, ttl=600)  # 10 minutos
@@ -158,8 +160,15 @@ def get_current_user():
     try:
         payload = verify_session_token(session_token)
         user_id = payload["sub"]
-
         return get_or_create_user(user_id)
+
+    except ExpiredSignatureError:
+        logger.info("Session expired. Redirecting to login.")
+        return redirect(url_for("login"))
+
+    except JWTError:
+        logger.warning("Invalid token.")
+        return redirect(url_for("login"))
 
     except Exception as e:
         logger.exception(f"Session validation failed: {e}")
@@ -257,7 +266,8 @@ def landing():
 def login():
     return render_template(
         "login.html",
-        clerk_publishable_key=CLERK_PUBLISHABLE_KEY
+        clerk_publishable_key=CLERK_PUBLISHABLE_KEY,
+        front_end_api=FRONT_END_API
     )
 
 # ---------------------------------------------------------
