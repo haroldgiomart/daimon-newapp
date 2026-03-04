@@ -162,17 +162,16 @@ def get_current_user():
         return get_or_create_user(user_id)
 
     except ExpiredSignatureError:
-        logger.info("Session expired. Redirecting to login.")
-        return redirect(url_for("login"))
+        logger.info("Session expired.")
+        return None
 
     except JWTError:
         logger.warning("Invalid token.")
-        return redirect(url_for("login"))
+        return None
 
     except Exception as e:
         logger.exception(f"Session validation failed: {e}")
         return None
-
 
 def require_auth(f):
     @wraps(f)
@@ -453,6 +452,7 @@ def toggle_favorite():
     return jsonify({"success": True})
 
 @app.route("/toggle-dislike", methods=["POST"])
+@require_auth
 def toggle_dislike():
 
     user_id = get_current_user_id()
@@ -494,6 +494,7 @@ def toggle_dislike():
 # Videos
 # ---------------------------------------------------------
 @app.route("/salud")
+@require_auth
 def videos():
     data = get_videos()
     return render_template("videos.html", data=data)
@@ -519,6 +520,7 @@ def mis_rutinas():
     return render_template("routines.html", routine=routine)
 
 @app.route("/routine/<user_id>/<year_week>/<int:day_number>")
+@require_auth
 def view_routine_day(user_id, year_week, day_number):
 
     day_data = get_routine(user_id, year_week, day_number)
