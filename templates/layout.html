@@ -19,39 +19,7 @@
   <!-- ========================= -->
   <!-- CLERK -->
   <!-- ========================= -->
-  <script
-    async
-    crossorigin="anonymous"
-    data-clerk-publishable-key="pk_test_ZW5nYWdpbmctb3N0cmljaC05LmNsZXJrLmFjY291bnRzLmRldiQ"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
-  </script>
 
-  <script>
-    window.addEventListener("load", async function () {
-      await Clerk.load();
-
-      // Si no está autenticado → redirigir a login
-      if (!Clerk.user && window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
-    });
-
-    // 🔥 Función GLOBAL para enviar token al backend
-    async function getAuthHeaders() {
-      if (!window.Clerk || !Clerk.session) {
-        return {
-          "Content-Type": "application/json"
-        };
-      }
-
-      const token = await Clerk.session.getToken();
-
-      return {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      };
-    }
-  </script>
 
   <!-- ========================= -->
   <!-- TRAVELPAYOUTS -->

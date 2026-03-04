@@ -14,7 +14,7 @@ from flask import (
 
 from functools import wraps
 from jose import jwt
-from jose.exceptions import  ExpiredSignatureError, JWTError
+from jose.exceptions import ExpiredSignatureError, JWTError
 from cachetools import TTLCache, cached
 from dotenv import load_dotenv
 from clerk_backend_api import Clerk
