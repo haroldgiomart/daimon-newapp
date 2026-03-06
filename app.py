@@ -356,18 +356,10 @@ def intent_search(intent):
 # ---------------------------------------------------------
 # Ejercicios
 # ---------------------------------------------------------
-
 @app.route("/ejercicios")
 @require_auth
 def ejercicios():
     user_id = get_current_user_id()
-
-    profile = None
-    if user_id:
-        profile = get_exercise_profile(user_id)
-        print(f"Exercise Profile: {profile}")
-
-    show_survey = profile is None
 
     data = all_items()
 
@@ -380,10 +372,8 @@ def ejercicios():
     return render_template(
         "ejercicios.html",
         exercises_by_target=data,
-        favoritos=favorite_ids,
-        show_survey=show_survey
+        favoritos=favorite_ids
     )
-
 
 @app.route("/exercise/<exercise_id>")
 @require_auth
