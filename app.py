@@ -237,6 +237,10 @@ def cupones():
         favoritos=favorite_ids  # 🔥 enviar al template
     )
 
+
+# ---------------------------------------------------------
+# Detalle Beneficio
+# ---------------------------------------------------------
 @app.route("/beneficio/<benefit_code>/<benefit_id>")
 @require_auth
 def beneficio_detalle(benefit_code, benefit_id):
@@ -250,6 +254,37 @@ def beneficio_detalle(benefit_code, benefit_id):
         "beneficio_detalle.html",
         benefit=benefit
     )
+
+# ---------------------------------------------------------
+# Redención
+# ---------------------------------------------------------
+@app.route("/beneficio/<benefit_id>/redimir", methods=["GET"])
+@require_auth
+def beneficio_redimir(benefit_id):
+
+    benefit_code = request.args.get("benefitCode")
+
+    if not benefit_code:
+        abort(400, description="benefitCode es requerido")
+
+    benefit_code = benefit_code.lstrip("#")
+
+    try:
+        response = redeem_benefit(benefit_code[1:])
+
+        if not response or "success" not in response:
+            abort(404, description="No fue posible redimir el beneficio")
+
+        return render_template(
+            "beneficio_redencion.html",
+            redeem=response["success"],
+            benefit_id=benefit_id,
+            benefit_code=benefit_code
+        )
+
+    except Exception:
+        logger.exception("Error en redención")
+        abort(500)
 
 # ---------------------------------------------------------
 # PUBLIC ROUTES
