@@ -43,7 +43,7 @@ def add_favorite(user_id, item_id, item_type):
     dynamodb = get_dynamodb_table()
     table = dynamodb.Table("daimon_user_data")
 
-    table.put_item(
+    response = table.put_item(
         Item={
             "PK": f"USER#{user_id}",
             "SK": f"FAVORITE#{item_type.upper()}#{item_id}",
@@ -53,18 +53,22 @@ def add_favorite(user_id, item_id, item_type):
         }
     )
 
+    print(f"Agregar favorito; {response}")
+
 
 def remove_favorite(user_id, item_id, item_type):
 
     dynamodb = get_dynamodb_table()
     table = dynamodb.Table("daimon_user_data")
 
-    table.delete_item(
+    response = table.delete_item(
         Key={
             "PK": f"USER#{user_id}",
             "SK": f"FAVORITE#{item_type.upper()}#{item_id}"
         }
     )
+
+    print(f"Remover favorito; {response}")
 
 
 def add_disliked(user_id, item_id, item_type):

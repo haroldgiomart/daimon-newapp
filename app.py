@@ -74,19 +74,33 @@ CLERK_ISSUER = os.environ.get("CLERK_ISSUER")
 CLERK_JWKS_URL = f"{CLERK_ISSUER}/.well-known/jwks.json"
 CLERK_PUBLISHABLE_KEY= os.environ.get("CLERK_PUBLISHABLE_KEY")
 
-jwks_cache = None
+jwks_cache = TTLCache(maxsize=1, ttl=60 * 60 * 24)  # 24h
 clerk_user_cache = TTLCache(maxsize=1000, ttl=600)  # 10 minutos
 
 
+@cached(jwks_cache)
 def get_jwks():
-    global jwks_cache
-    if jwks_cache is None:
-        response = requests.get(CLERK_JWKS_URL)
-        jwks_cache = response.json()
-    return jwks_cache
 
+    try:
+        response = requests.get(CLERK_JWKS_URL, timeout=5)
+
+        if response.status_code != 200:
+            raise Exception(f"JWKS fetch failed {response.status_code}")
+
+        return response.json()
+
+    except Exception as e:
+        logger.exception("JWKS fetch error")
+        raise Exception("JWKS unavailable")
+
+
+token_cache = TTLCache(maxsize=5000, ttl=600)
 
 def verify_session_token(token):
+
+    if token in token_cache:
+        return token_cache[token]
+
     jwks = get_jwks()
 
     unverified_header = jwt.get_unverified_header(token)
@@ -98,9 +112,9 @@ def verify_session_token(token):
     )
 
     if not key:
-        raise Exception("Public key not found.")
+        raise Exception("Public key not found")
 
-    return jwt.decode(
+    payload = jwt.decode(
         token,
         key,
         algorithms=["RS256"],
@@ -108,6 +122,9 @@ def verify_session_token(token):
         options={"verify_aud": False}
     )
 
+    token_cache[token] = payload
+
+    return payload
 
 def get_or_create_user(user_id):
 
@@ -162,15 +179,15 @@ def get_current_user():
         return get_or_create_user(user_id)
 
     except ExpiredSignatureError:
-        logger.info("Session expired.")
+        logger.info("Session expired")
         return None
 
     except JWTError:
-        logger.warning("Invalid token.")
+        logger.warning("Invalid JWT")
         return None
 
     except Exception as e:
-        logger.exception(f"Session validation failed: {e}")
+        logger.exception("Session validation failed")
         return None
 
 def require_auth(f):
@@ -183,6 +200,7 @@ def require_auth(f):
             return redirect(url_for("login"))
 
         request.user = user
+
         return f(*args, **kwargs)
 
     return wrapper
@@ -460,19 +478,17 @@ def save_exercise_survey():
 def toggle_favorite():
 
     user_id = get_current_user_id()
-    data = request.json
+    data = request.json or {}
 
     item_id = data.get("item_id")
     item_type = data.get("item_type")
     is_active = data.get("is_active")
 
-    if not item_id or not item_type:
+    if not item_id or not item_type or is_active is None:
         return jsonify({"error": "Missing data"}), 400
 
-    if is_active:
-        add_favorite(user_id, item_id, item_type)
-    else:
-        remove_favorite(user_id, item_id, item_type)
+    action = add_favorite if is_active else remove_favorite
+    action(user_id, item_id, item_type)
 
     return jsonify({"success": True})
 
@@ -481,40 +497,29 @@ def toggle_favorite():
 def toggle_dislike():
 
     user_id = get_current_user_id()
-
-    data = request.json
-
-    if not data:
-        return jsonify({"error": "No JSON"}), 400
+    data = request.json or {}
 
     item_id = data.get("item_id")
     is_active = data.get("is_active")
 
-    # 🔥 Validación correcta
-    if item_id is None or is_active is None:
+    if not item_id or is_active is None:
         return jsonify({"error": "Missing data"}), 400
 
     try:
-        if is_active:
-            add_disliked(
-                user_id=user_id,
-                item_id=item_id,
-                item_type="exercise"
-            )
-        else:
-            remove_disliked(
-                user_id=user_id,
-                item_id=item_id,
-                item_type="exercise"
-            )
+
+        action = add_disliked if is_active else remove_disliked
+
+        action(
+            user_id=user_id,
+            item_id=item_id,
+            item_type="exercise"
+        )
 
         return jsonify({"success": True})
 
     except Exception as error:
-        print(f"Error toggle dislike: {error}")
         logger.exception("Error toggling dislike")
         return jsonify({"error": "Server error"}), 500
-
 # ---------------------------------------------------------
 # Videos
 # ---------------------------------------------------------
