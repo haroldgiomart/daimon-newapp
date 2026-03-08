@@ -285,10 +285,11 @@ def beneficio_redimir(benefit_id):
     if not benefit_code:
         abort(400, description="benefitCode es requerido")
 
+    user_id = get_current_user_id()
     benefit_code = benefit_code.lstrip("#")
 
     try:
-        response = redeem_benefit(benefit_code[1:])
+        response = redeem_benefit(user_id,benefit_code[1:])
 
         if not response or "success" not in response:
             abort(404, description="No fue posible redimir el beneficio")
