@@ -9,11 +9,15 @@ html, body {
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f6f6f9;
+  font-family:-apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size:16px;
+    font-weight:400;
+    line-height:normal;
+    color:rgb(28,28,30);
+  background:#f5f5f7;
 }
 
-/* ================= HEADER ================= */
+/* ================= HEADER =================  background: #f6f6f9; */
 
 .topbar {
   background: linear-gradient(135deg, #5b2eff, #4b1fcf);
@@ -1947,4 +1951,258 @@ section h3 {
 .logout-btn:hover {
   background: #f8f6ff;
   color: #5f2eea;
+}
+
+
+/* NUEVO BENEFICIO DETALLE */
+.benefit-container{
+    max-width:1100px;
+    margin:auto;
+    padding:28px;
+}
+
+/* DESCRIPCIÓN DEL BENEFICIO */
+
+.benefit-description{
+    font-size:16px;
+    line-height:1.6;
+    color:#1c1c1e;
+}
+
+/* párrafos */
+
+.benefit-description p{
+    margin-bottom:14px;
+}
+
+.benefit-description > * + *{
+margin-top:10px;
+}
+
+/* listas */
+
+.benefit-description ul{
+    list-style:none;
+    padding-left:0;
+}
+
+/* items de lista */
+.benefit-description li{
+    position:relative;
+    bepadding-left:20px;
+}
+
+.benefit-description li::before{
+    content:"•";
+    position:absolute;
+    left:0;
+    color:#6C3EF4;
+    font-weight:bold;
+}
+
+.benefit-description em{
+    color:#6e6e73;
+    font-style:normal;
+
+}
+
+/* negritas */
+.benefit-description strong{
+    font-weight:600;
+}
+
+/* última línea */
+.benefit-description p:last-child{
+    margin-bottom:0;
+}
+
+.benefit-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.back-link{
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* imagen */
+
+.benefit-media img{
+  width:100%;
+  border-radius:12px;
+}
+
+/* info */
+
+.benefit-main-info{
+  margin-top:15px;
+}
+
+.benefit-title{
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:-0.3px;
+    margin-bottom:6px;
+    color:#1c1c1e;
+}
+
+.benefit-short{
+    font-size:17px;
+    color:#6e6e73;
+    margin-bottom:20px;
+}
+
+/* CTA */
+
+.benefit-action{
+    margin-bottom:28px;
+}
+
+.btn-primary{
+    display:inline-block;
+    padding:14px 22px;
+    background:linear-gradient(
+    135deg,
+    #6C3EF4,
+    #7c52ff
+    );
+    color:white;
+    border-radius:12px;
+    font-weight:600;
+    text-decoration:none;
+    transition:all .15s ease;
+}
+
+.btn-primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 6px 14px rgba(108,62,244,0.35);
+}
+
+
+
+.benefit-grid{
+  display:grid;
+  grid-template-columns:70% 30%;
+  gap:40px;
+}
+
+/* channels */
+
+.benefit-use{
+  margin:20px 0;
+}
+
+.benefit-channels{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+/* BADGE DESCUENTO */
+
+.benefit-discount {
+  display: inline-block;
+  background: #ffe8e6;
+  color: #d93025;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-size: 18px;
+}
+
+.channel{
+  background:#f3f3f3;
+  padding:6px 10px;
+  border-radius:8px;
+  font-size:13px;
+}
+
+/* acordeones */
+
+
+.accordion{
+border-top:1px solid #eee;
+padding-top:20px;
+}
+
+.accordion details{
+    margin-bottom:20px;
+    padding:14px;
+    border-radius:10px;
+    background:#f2f2f2;
+}
+
+.accordion summary{
+cursor:pointer;
+font-weight:600;
+margin-bottom:10px;
+}
+
+
+/* TÉRMINOS */
+
+.benefit-verbatim{
+margin-top:20px;
+font-size:14px;
+color:#555;
+}
+
+/* COLUMNA DERECHA */
+
+.benefit-side{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    height:fit-content;
+}
+
+/* IMAGEN */
+
+.benefit-image{
+    width:100%;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+/*  COMO REDIMIR */
+
+.benefit-wayto{
+background:#f7f7f7;
+padding:15px;
+border-radius:10px;
+}
+
+.benefit-wayto h4{
+margin-bottom:10px;
+}
+
+.benefit-wayto ul{
+padding-left:18px;
+}
+
+
+/* RESPONSIVE */
+.benefit-grid{
+  display:grid;
+  grid-template-columns:70% 30%;
+  gap:40px;
+}
+
+@media (max-width:768px){
+
+  .benefit-grid{
+    grid-template-columns:1fr;
+  }
+
+  .benefit-side{
+    order:2;
+  }
+
+}
+
 }

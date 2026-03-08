@@ -2,101 +2,140 @@
 
 {% block content %}
 
-<a href="javascript:history.back()" class="btn-back">
-  ← Volver
-</a>
+<div class="benefit-container">
 
-<section class="beneficio-detalle-grid">
+  <a href="javascript:history.back()" class="back-link">← Volver</a>
 
-  <!-- ================= COLUMNA IZQUIERDA ================= -->
-  <div class="beneficio-left">
+  <div class="benefit-grid">
 
-    <!-- Short description (headline) -->
-    {% if benefit.shortDescription %}
-      <p class="beneficio-short">
-        {{ benefit.shortDescription }}
-      </p>
-    {% endif %}
+    <!-- ================= COLUMNA PRINCIPAL ================= -->
+    <div class="benefit-main">
 
-    <!-- Nombre -->
-    <h1 class="beneficio-title">
-      {{ benefit.name }}
-    </h1>
+      <!-- TÍTULO -->
+      <h1 class="benefit-title">
+        {{ benefit.name }}
+      </h1>
 
-    <!-- ================= BOTÓN REDIMIR ================= -->
-    {% if benefit.benefitCode %}
-      <a
-        href="{{ url_for('beneficio_redimir', benefit_id=benefit._id) }}?benefitCode={{ benefit.benefitCode }}"
-        class="btn-redimir"
-      >
-        Quiero redimir el beneficio
-      </a>
-    {% else %}
-      <button class="btn-redimir disabled" disabled>
-        Beneficio no redimible
-      </button>
-    {% endif %}
-
-    <!-- Descripción larga -->
-    {% if benefit.description %}
-      <div class="beneficio-description">
-        {{ benefit.description | safe }}
+      <!-- SHORT DESCRIPTION / DESCUENTO -->
+      {% if benefit.shortDescription %}
+      <div class="benefit-discount">
+        🔥 {{ benefit.shortDescription }}
       </div>
-    {% endif %}
+      {% endif %}
 
-    <!-- Verbatim / Términos -->
-    {% if benefit.listVebatim and benefit.listVebatim|length > 0 %}
-      <div class="beneficio-verbatim">
+      <!-- BOTÓN REDIMIR -->
+      <div class="benefit-action">
+
+        {% if benefit.benefitCode %}
+        <a
+          href="{{ url_for('beneficio_redimir', benefit_id=benefit._id) }}?benefitCode={{ benefit.benefitCode }}"
+          class="btn-primary"
+        >
+          Redimir beneficio
+        </a>
+        {% else %}
+        <button class="btn-primary disabled" disabled>
+          Beneficio no disponible
+        </button>
+        {% endif %}
+
+      </div>
+
+      <!-- DESCRIPCIÓN -->
+      {% if benefit.description %}
+      <div class="accordion">
+
+        <details open>
+          <summary>Descripción del beneficio</summary>
+
+          <div class="benefit-description">
+            {{ benefit.description | safe }}
+          </div>
+
+        </details>
+
+      </div>
+      {% endif %}
+
+      <!-- VERBATIM / TÉRMINOS -->
+      {% if benefit.listVebatim and benefit.listVebatim|length > 0 %}
+
+      <div class="benefit-verbatim">
+
+        <h4>Términos y condiciones</h4>
+
         {{ benefit.listVebatim[0].verbatim1 | safe }}
+
       </div>
-    {% endif %}
 
-  </div>
+      {% endif %}
 
-  <!-- ================= COLUMNA DERECHA ================= -->
-  <aside class="beneficio-right">
+    </div>
 
-    <!-- Imagen -->
-    {% if benefit.listImages and benefit.listImages|length > 0 %}
+
+    <!-- ================= COLUMNA SECUNDARIA ================= -->
+    <aside class="benefit-side">
+
+      <!-- IMAGEN -->
+      {% if benefit.listImages and benefit.listImages|length > 0 %}
       <img
-        class="beneficio-image"
+        class="benefit-image"
         src="{{ benefit.listImages[1].url if benefit.listImages|length > 1 else benefit.listImages[0].url }}"
         alt="{{ benefit.name }}"
       >
-    {% endif %}
+      {% endif %}
 
-    <!-- Favorito -->
-    <button class="favorito-detalle" title="Marcar como favorito">
-      ♡ Marcar favorito
-    </button>
+      <!-- FAVORITO -->
+      <button
+        class="favorito-detalle {% if benefit._id in favoritos %}active{% endif %}"
+        data-id="{{ benefit._id }}"
+        data-type="benefit"
+        onclick="toggleFavorite(event, this)"
+      >
+        <i class="{% if benefit._id in favoritos %}fa-solid fa-heart{% else %}fa-regular fa-heart{% endif %}"></i>
+        Guardar beneficio
+      </button>
 
-    <!-- Way to use -->
-    {% if benefit.wayToUse %}
-      <div class="beneficio-wayto">
-        <h4>Usa este beneficio:</h4>
+
+      <!-- COMO REDIMIRLO -->
+      {% if benefit.wayToUse %}
+
+      <div class="benefit-wayto">
+
+        <h4>¿Cómo redimirlo?</h4>
 
         <ul>
+
           {% if benefit.wayToUse.onsite %}
-            <li>🏬 Tienda física</li>
+          <li>🏬 En tienda física</li>
           {% endif %}
+
           {% if benefit.wayToUse.online %}
-            <li>🌐 Online</li>
+          <li>🌐 Desde el sitio web</li>
           {% endif %}
+
           {% if benefit.wayToUse.whatsapp %}
-            <li>💬 WhatsApp</li>
+          <li>💬 Vía WhatsApp</li>
           {% endif %}
+
           {% if benefit.wayToUse.phone %}
-            <li>📞 Teléfono</li>
+          <li>📞 Por teléfono</li>
           {% endif %}
+
           {% if benefit.wayToUse.email %}
-            <li>✉️ Email</li>
+          <li>✉️ Por correo electrónico</li>
           {% endif %}
+
         </ul>
+
       </div>
-    {% endif %}
 
-  </aside>
+      {% endif %}
 
-</section>
+    </aside>
+
+  </div>
+
+</div>
 
 {% endblock %}
