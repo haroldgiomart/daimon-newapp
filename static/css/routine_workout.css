@@ -105,7 +105,7 @@ body {
 
 .exercise-meta {
     font-size: 14px;
-    color: #7a7a7a;
+    color: #3B6CFF;
     margin-bottom: 12px;
 }
 
@@ -116,7 +116,7 @@ body {
 }
 
 .exercise-prescription span {
-    background: #ececf3;
+    background: #FDBA2D;
     padding: 6px 10px;
     border-radius: 10px;
 }

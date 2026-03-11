@@ -441,11 +441,8 @@ def check_and_complete_routine(user_id: str,year_week: str,now: str):
     except Exception as Error:
         print(f"check_and_complete_routine Error: {Error}")
 
-def update_routine_progress(
-    user_id: str,
-    year_week: str,
-    now: str
-):
+def update_routine_progress(user_id: str,year_week: str,now: str):
+
     dynamodb = get_dynamodb_table()
     table = dynamodb.Table("daimon_exercise_routines")
 

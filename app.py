@@ -521,6 +521,25 @@ def toggle_dislike():
     except Exception as error:
         logger.exception("Error toggling dislike")
         return jsonify({"error": "Server error"}), 500
+
+# ---------------------------------------------------------
+# Perfil usuario
+# ---------------------------------------------------------
+@app.route("/perfil")
+@require_auth
+def perfil():
+
+    user_id = get_current_user_id()
+
+    profile = get_profile(user_id)
+    exercise = get_exercise_preferences(user_id)
+
+    return render_template(
+        "perfil.html",
+        survey_data=profile["survey_data"],
+        exercise=exercise
+    )
+
 # ---------------------------------------------------------
 # Videos
 # ---------------------------------------------------------

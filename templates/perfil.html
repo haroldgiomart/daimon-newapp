@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<title>Mi Perfil - Daimon</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+</head>
+
+<body>
+
+<div class="profile-container">
+
+<h1>Mi Perfil</h1>
+
+<!-- ================= PREFERENCIAS GENERALES ================= -->
+
+<div class="profile-section">
+
+<h2>Preferencias generales</h2>
+
+<form id="general-form">
+
+<div class="profile-field">
+<label>Situación actual</label>
+<select name="situation">
+<option value="empleado" {% if survey_data.situation == "empleado" %}selected{% endif %}>Empleado</option>
+<option value="emprendedor" {% if survey_data.situation == "emprendedor" %}selected{% endif %}>Emprendedor</option>
+<option value="estudiante" {% if survey_data.situation == "estudiante" %}selected{% endif %}>Estudiante</option>
+</select>
+</div>
+
+<div class="profile-field">
+<label>Tienes hijos</label>
+<select name="has_kids">
+<option value="si" {% if survey_data.has_kids == "si" %}selected{% endif %}>Sí</option>
+<option value="no" {% if survey_data.has_kids == "no" %}selected{% endif %}>No</option>
+</select>
+</div>
+
+<div class="profile-field">
+<label>Nivel de estrés</label>
+<select name="stress_level">
+<option value="Bajo" {% if survey_data.stress_level == "Bajo" %}selected{% endif %}>Bajo</option>
+<option value="Medio" {% if survey_data.stress_level == "Medio" %}selected{% endif %}>Medio</option>
+<option value="Alto" {% if survey_data.stress_level == "Alto" %}selected{% endif %}>Alto</option>
+</select>
+</div>
+
+<div class="profile-field">
+<label>Tiempo libre</label>
+<input type="text" name="free_time" value="{{ survey_data.free_time | join(', ') }}">
+</div>
+
+<div class="profile-field">
+<label>Área que quieres mejorar</label>
+<input type="text" name="improvement" value="{{ survey_data.improvement | join(', ') }}">
+</div>
+
+<button type="submit" class="profile-save">
+Guardar preferencias
+</button>
+
+</form>
+
+</div>
+
+<!-- ================= EJERCICIO ================= -->
+
+<div class="profile-section">
+
+<h2>Preferencias de ejercicio</h2>
+
+<form id="exercise-form">
+
+<div class="profile-field">
+<label>Objetivo</label>
+<select name="goal">
+<option value="perder_peso" {% if exercise.goal == "perder_peso" %}selected{% endif %}>Perder peso</option>
+<option value="ganar_musculo" {% if exercise.goal == "ganar_musculo" %}selected{% endif %}>Ganar músculo</option>
+<option value="mantener" {% if exercise.goal == "mantener" %}selected{% endif %}>Mantener</option>
+</select>
+</div>
+
+<div class="profile-field">
+<label>Nivel</label>
+<select name="level">
+<option value="principiante" {% if exercise.level == "principiante" %}selected{% endif %}>Principiante</option>
+<option value="medio" {% if exercise.level == "medio" %}selected{% endif %}>Medio</option>
+<option value="avanzado" {% if exercise.level == "avanzado" %}selected{% endif %}>Avanzado</option>
+</select>
+</div>
+
+<div class="profile-field">
+<label>Duración entrenamiento (min)</label>
+<input type="number" name="duration" value="{{ exercise.duration }}">
+</div>
+
+<div class="profile-field">
+<label>Enfoque</label>
+<select name="focus">
+<option value="full_body" {% if exercise.focus == "full_body" %}selected{% endif %}>Full Body</option>
+<option value="upper_body" {% if exercise.focus == "upper_body" %}selected{% endif %}>Upper Body</option>
+<option value="lower_body" {% if exercise.focus == "lower_body" %}selected{% endif %}>Lower Body</option>
+</select>
+</div>
+
+<div class="profile-field">
+<label>Lugar de entrenamiento</label>
+<select name="location">
+<option value="casa" {% if exercise.location == "casa" %}selected{% endif %}>Casa</option>
+<option value="gimnasio" {% if exercise.location == "gimnasio" %}selected{% endif %}>Gimnasio</option>
+</select>
+</div>
+
+<div class="profile-field">
+<label>Tienes lesiones</label>
+<select name="injury">
+<option value="no" {% if exercise.injury == "no" %}selected{% endif %}>No</option>
+<option value="si" {% if exercise.injury == "si" %}selected{% endif %}>Sí</option>
+</select>
+</div>
+
+<button type="submit" class="profile-save">
+Guardar preferencias de ejercicio
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>
