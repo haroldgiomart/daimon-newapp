@@ -46,14 +46,16 @@ from services.user_data_service import (
     get_user_favorites,
     add_disliked,
     remove_disliked,
-    create_user_if_not_exists
+    create_user_if_not_exists,
+    get_user_profile
 )
 from services.exercise_profile import get_exercise_profile, save_exercise_profile
 from services.save_routines_services import (
     generate_routine,
     get_routines_by_status,
     get_routine,
-    complete_exercise
+    complete_exercise,
+    get_user_exercise_profile
 )
 
 # ---------------------------------------------------------
@@ -467,7 +469,7 @@ def save_exercise_survey():
 
     save_exercise_profile(user_id, user_data)
 
-    routine = generate_routine(user_data)
+    routine = generate_routine(user_id)
     print(f"La rutina generada es: {routine}")
 
     return redirect(url_for("mis_rutinas"))
@@ -531,8 +533,8 @@ def perfil():
 
     user_id = get_current_user_id()
 
-    profile = get_profile(user_id)
-    exercise = get_exercise_preferences(user_id)
+    profile = get_user_profile(user_id)
+    exercise = get_user_exercise_profile(user_id)
 
     return render_template(
         "perfil.html",

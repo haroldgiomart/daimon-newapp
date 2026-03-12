@@ -119,6 +119,17 @@ def get_user_items(user_id):
     )
     return response.get("Items", [])
 
+def get_user_profile(user_id):
+
+    dynamodb = get_dynamodb_table()
+    table = dynamodb.Table("daimon_user_data")
+    response = table.get_item(
+        Key={
+            "PK": f"USER#{user_id}",
+            "SK": "PROFILE"
+        }
+    )
+    return response.get("Item", [])
 
 def get_user_favorites(user_id, item_type=None):
 
@@ -161,3 +172,9 @@ def create_user_if_not_exists(user_id, email, first_name, last_name, image_url):
             "image_url": image_url
         }
     )
+
+
+if __name__ == '__main__':
+    user_id = "user_3AE5yTdcD52kbDgk4Pq5zA1RTNU"
+    respuesta = get_user_profile(user_id)
+    print(f"Respuesta: {respuesta}")

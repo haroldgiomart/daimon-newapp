@@ -1,0 +1,147 @@
+/* =========================
+   PAGE
+========================= */
+
+body {
+  background: #f5f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #222;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.profile-container {
+  max-width: 820px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.profile-container h1 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* =========================
+   BREADCRUMB
+========================= */
+
+.breadcrumb {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.breadcrumb a {
+  color: #6b46c1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  margin: 0 6px;
+}
+
+.breadcrumb-current {
+  color: #999;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.profile-section {
+  background: white;
+  border-radius: 12px;
+  padding: 26px;
+  margin-bottom: 28px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+}
+
+.profile-section h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* =========================
+   FIELDS
+========================= */
+
+.profile-field {
+  margin-bottom: 18px;
+}
+
+.profile-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Inputs */
+
+.profile-field input,
+.profile-field select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  font-size: 14px;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.profile-field input:focus,
+.profile-field select:focus {
+  outline: none;
+  border-color: #6b46c1;
+  box-shadow: 0 0 0 2px rgba(107,70,193,0.1);
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.profile-save {
+  margin-top: 10px;
+  background: #6b46c1;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.profile-save:hover {
+  background: #5a38a8;
+}
+
+.profile-save:active {
+  transform: translateY(1px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .profile-container {
+    padding: 25px 16px;
+  }
+
+  .profile-section {
+    padding: 20px;
+  }
+
+}

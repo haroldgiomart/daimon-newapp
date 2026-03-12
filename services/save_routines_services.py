@@ -7,6 +7,32 @@ from decimal import Decimal
 
 
 # ==========================================================
+# PROFILE - LOAD FROM DYNAMODB
+# ==========================================================
+
+def get_user_exercise_profile(user_id):
+
+    main_objective, level, location = None, None, None
+
+    dynamodb = get_dynamodb_table()
+    table = dynamodb.Table("daimon_exercise_profile")
+
+    response = table.get_item(
+        Key={
+            "user_id": user_id
+        }
+    )
+
+    print(f"Trayecto Perfil de Ejercicio del Usuario: {response}")
+
+    if response.get("Item"):
+        main_objective = response['Item']['goal']
+        level = response['Item']['level']
+        location = response['Item']['location']
+
+    return main_objective, level, location
+
+# ==========================================================
 # EXERCISES - LOAD FROM DYNAMODB
 # ==========================================================
 
@@ -143,12 +169,14 @@ def save_week_routine(user_preferences: dict, routines: dict):
 # MAIN HANDLER (AWS LAMBDA)
 # ==========================================================
 
-def generate_routine(event):
+def generate_routine(user_id):
 
-    main_objective = event['goal']
-    user_id = event['user_id']
-    level = event['level']
-    location = event['location']
+    # ------------------------------------------------------
+    # 0. Traer información del usuario
+    # ------------------------------------------------------
+    main_objective, level, location = get_user_exercise_profile(user_id)
+    if level == "None":
+        return {"Error": "No se encontró el perfil de ejercicio del usuario"}
 
     # ------------------------------------------------------
     # 1. Load exercises
