@@ -1,9 +1,12 @@
 import boto3
 import os
 from datetime import datetime
-from services.RoutineDynamicPro_IG import RoutineEngineDynamic
+from services.New_RoutineGeneration import RoutineEngineDynamic
+#from services.RoutineDynamicPro_IG import RoutineEngineDynamic
 from services.dynamodb_service import get_dynamodb_table
 from decimal import Decimal
+import time
+import json
 
 
 # ==========================================================
@@ -12,7 +15,7 @@ from decimal import Decimal
 
 def get_user_exercise_profile(user_id):
 
-    main_objective, level, location = None, None, None
+    exercise_user_profile = {}
 
     dynamodb = get_dynamodb_table()
     table = dynamodb.Table("daimon_exercise_profile")
@@ -23,14 +26,11 @@ def get_user_exercise_profile(user_id):
         }
     )
 
-    print(f"Trayecto Perfil de Ejercicio del Usuario: {response}")
-
     if response.get("Item"):
-        main_objective = response['Item']['goal']
-        level = response['Item']['level']
-        location = response['Item']['location']
+        exercise_user_profile = response['Item']
+        return exercise_user_profile
 
-    return main_objective, level, location
+    return exercise_user_profile
 
 # ==========================================================
 # EXERCISES - LOAD FROM DYNAMODB
@@ -174,8 +174,8 @@ def generate_routine(user_id):
     # ------------------------------------------------------
     # 0. Traer información del usuario
     # ------------------------------------------------------
-    main_objective, level, location = get_user_exercise_profile(user_id)
-    if level == "None":
+    exercise_user_profile = get_user_exercise_profile(user_id)
+    if exercise_user_profile == "None":
         return {"Error": "No se encontró el perfil de ejercicio del usuario"}
 
     # ------------------------------------------------------
@@ -189,20 +189,20 @@ def generate_routine(user_id):
     # ------------------------------------------------------
     exercises = filter_per_equipment_and_level(
         exercises,
-        location,
-        level
+        exercise_user_profile['location'],
+        exercise_user_profile['level']
     )
     print(f"Ejercicios filtrados: {len(exercises)}")
 
     # ------------------------------------------------------
     # 3. Training days based on level
     # ------------------------------------------------------
-    if level == "bajo":
-        training_days = 4
-    elif level == "medio":
-        training_days = 6
-    elif level == "alto":
-        training_days = 7
+    if exercise_user_profile['level'] == "bajo":
+        exercise_user_profile['training_days'] = 4
+    elif exercise_user_profile['level'] == "medio":
+        exercise_user_profile['training_days'] = 5
+    elif exercise_user_profile['level'] == "alto":
+        exercise_user_profile['training_days'] = 6
     else:
         training_days = 4
 
@@ -214,8 +214,7 @@ def generate_routine(user_id):
     # ------------------------------------------------------
     # 5. Generate weekly routine
     # ------------------------------------------------------
-    routines = engine.generate_week(main_objective, training_days)
-
+    routines = engine.generate_week(exercise_user_profile['goal'],exercise_user_profile['training_days'], exercise_user_profile['level'], exercise_user_profile['focus'], exercise_user_profile['duration'], exercise_user_profile['location'], exercise_user_profile['injury'])
     print(f"Rutinas generadas: {len(routines)}")
 
     # ------------------------------------------------------
@@ -223,7 +222,7 @@ def generate_routine(user_id):
     # ------------------------------------------------------
     user_preferences = {
         "user_id": user_id,
-        "goal": main_objective
+        "goal": exercise_user_profile['goal']
     }
 
     saved_item = save_week_routine(user_preferences, routines)
@@ -510,6 +509,7 @@ def update_routine_progress(user_id: str,year_week: str,now: str):
 
         # Si llegó a 100 → marcar rutina como COMPLETED
         if progress == 100:
+            generate_routine(user_id)
             update_expression += ", #sr = :completed, completed_at = :now"
             expression_values[":completed"] = "COMPLETED"
             expression_values[":now"] = now
@@ -534,5 +534,7 @@ def update_routine_progress(user_id: str,year_week: str,now: str):
 
 if __name__ == '__main__':
     #response = get_routines_by_status("e306fbfa-3d2e-488b-8e59-b58ed5c7485e", "ACTIVE")
-    day_data = get_routine("e306fbfa-3d2e-488b-8e59-b58ed5c7485e", "2026-W08", 1)
-    print(f"Response: {day_data}")
+    #day_data = get_routine("e306fbfa-3d2e-488b-8e59-b58ed5c7485e", "2026-W08", 1)
+    #print(f"Response: {day_data}")
+    week_routine = generate_routine("user_3AE5yTdcD52kbDgk4Pq5zA1RTNU")
+    print(json.dumps(week_routine, indent=2, ensure_ascii=False))

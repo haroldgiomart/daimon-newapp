@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="benefit-container">
+
+  <a href="javascript:history.back()" class="back-link">← Volver</a>
+
+  <div class="benefit-grid">
+
+    <div class="benefit-main">
+
+      <h1 class="benefit-title">
+        {{ product.name }}
+      </h1>
+
+      {% if product.shortDescription %}
+      <div class="benefit-discount">
+        🛍️ {{ product.shortDescription }}
+      </div>
+      {% endif %}
+
+      <div class="benefit-action">
+        <a
+          href="{{ url_for('affiliate_redirect', product_id=product._id) }}"
+          class="btn-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver producto
+        </a>
+      </div>
+
+      {% if product.description %}
+      <div class="accordion">
+        <details open>
+          <summary>Descripción del producto</summary>
+          <div class="benefit-description">
+            {{ product.description | safe }}
+          </div>
+        </details>
+      </div>
+      {% endif %}
+
+      {% if product.brand or product.price or product.rating %}
+      <div class="benefit-verbatim">
+        <h4>Información del producto</h4>
+        <ul>
+          {% if product.brand %}<li><strong>Marca:</strong> {{ product.brand }}</li>{% endif %}
+          {% if product.price %}<li><strong>Precio:</strong> {{ product.currency }} {{ product.price }}</li>{% endif %}
+          {% if product.rating %}<li><strong>Calificación:</strong> {{ product.rating }}</li>{% endif %}
+          {% if product.reviewCount %}<li><strong>Reseñas:</strong> {{ product.reviewCount }}</li>{% endif %}
+        </ul>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <aside class="benefit-side">
+
+      {% if product.gallery and product.gallery|length > 0 %}
+      <img
+        class="benefit-image"
+        src="{{ product.gallery[0] }}"
+        alt="{{ product.name }}"
+      >
+      {% elif product.imageUrl %}
+      <img
+        class="benefit-image"
+        src="{{ product.imageUrl }}"
+        alt="{{ product.name }}"
+      >
+      {% endif %}
+
+      <button
+        class="favorito-detalle {% if product._id in favoritos %}active{% endif %}"
+        data-id="{{ product._id }}"
+        data-type="affiliate_product"
+        onclick="toggleFavorite(event, this)"
+      >
+        <i class="{% if product._id in favoritos %}fa-solid fa-heart{% else %}fa-regular fa-heart{% endif %}"></i>
+        Guardar producto
+      </button>
+
+      <div class="benefit-wayto">
+        <h4>Compra</h4>
+        <ul>
+          <li>🌐 Disponible online</li>
+          <li>🛒 Compra en tienda externa</li>
+          <li>🔗 Enlace afiliado</li>
+        </ul>
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>
+
+{% endblock %}

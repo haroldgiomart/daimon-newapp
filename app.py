@@ -58,6 +58,12 @@ from services.save_routines_services import (
     get_user_exercise_profile
 )
 
+from services.affiliate_products import (
+    get_affiliate_products_grouped,
+    get_affiliate_product_by_id,
+    save_affiliate_click
+)
+
 # ---------------------------------------------------------
 # APP CONFIG
 # ---------------------------------------------------------
@@ -664,6 +670,56 @@ def search():
         "search_results.html",
         benefits=benefits
     )
+# ---------------------------------------------------------
+# COMPRAS - AFFILIATE MARKETING
+# ---------------------------------------------------------
+@app.route("/compras")
+@require_auth
+def compras():
+    user_id = get_current_user_id()
+
+    products_by_subcategory = get_affiliate_products_grouped()
+
+    favorites = get_user_favorites(user_id, item_type="affiliate_product")
+    favorite_ids = [item["item_id"] for item in favorites]
+
+    return render_template(
+        "compras.html",
+        products_by_subcategory=products_by_subcategory,
+        favoritos=favorite_ids
+    )
+@app.route("/compras/<product_id>")
+@require_auth
+def affiliate_product_detail(product_id):
+    user_id = get_current_user_id()
+
+    product = get_affiliate_product_by_id(product_id)
+
+    if not product:
+        abort(404, description="Producto no encontrado")
+
+    favorites = get_user_favorites(user_id, item_type="affiliate_product")
+    favorite_ids = [item["item_id"] for item in favorites]
+
+    return render_template(
+        "affiliate_product_detail.html",
+        product=product,
+        favoritos=favorite_ids
+    )
+@app.route("/affiliate/redirect/<product_id>")
+@require_auth
+def affiliate_redirect(product_id):
+    product = get_affiliate_product_by_id(product_id)
+
+    print(f"Información Producto: {product}")
+    user_id = get_current_user_id()
+
+    if not product or not product.get("affiliateUrl"):
+        abort(404, description="Producto no disponible")
+
+    save_affiliate_click(product,user_id)
+
+    return redirect(product["affiliateUrl"])
 
 # ---------------------------------------------------------
 # ERROR HANDLERS

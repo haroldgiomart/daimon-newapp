@@ -7,7 +7,6 @@ def get_recent_benefits():
     try:
         response = requests.get(API_URL, timeout=10)
         response.raise_for_status()
-        print(response.json())
         return response.json()
 
     except Exception as e:

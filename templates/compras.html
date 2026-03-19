@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% for subcategory_id, products in products_by_subcategory.items() %}
+<section>
+  <h3>{{ subcategory_id }}</h3>
+
+  <div class="cards">
+    {% for product in products %}
+      {% include "partials/affiliate_product_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+{% endblock %}
