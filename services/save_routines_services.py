@@ -204,7 +204,7 @@ def generate_routine(user_id):
     elif exercise_user_profile['level'] == "alto":
         exercise_user_profile['training_days'] = 6
     else:
-        training_days = 4
+        exercise_user_profile["training_days"] = 4
 
     # ------------------------------------------------------
     # 4. Initialize Engine
@@ -214,8 +214,17 @@ def generate_routine(user_id):
     # ------------------------------------------------------
     # 5. Generate weekly routine
     # ------------------------------------------------------
-    routines = engine.generate_week(exercise_user_profile['goal'],exercise_user_profile['training_days'], exercise_user_profile['level'], exercise_user_profile['focus'], exercise_user_profile['duration'], exercise_user_profile['location'], exercise_user_profile['injury'])
-    print(f"Rutinas generadas: {len(routines)}")
+    routines = engine.generate_week(
+        goal=exercise_user_profile["goal"],
+        training_days=exercise_user_profile["training_days"],
+        level=exercise_user_profile["level"],
+        focus=exercise_user_profile["focus"],
+        duration=exercise_user_profile["duration"],
+        location=exercise_user_profile["location"],
+        injury=exercise_user_profile["injury"]
+    )
+
+    print(f"Rutinas generadas: {len(routines['days'])}")
 
     # ------------------------------------------------------
     # 6. Save routine

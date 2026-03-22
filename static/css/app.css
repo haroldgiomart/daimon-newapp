@@ -165,6 +165,13 @@ section h2 {
   gap: 8px;
   position: relative;
 }
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
 /* ================= IMAGEN + FAVORITO ================= */
 
 .card-image-wrapper {
@@ -186,13 +193,29 @@ section h2 {
 
 .fav-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
+  bottom: 16px;
+  right: 16px;
   background: white;
   border: none;
-  font-size: 22px;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  z-index: 10;
+}
+
+.fav-btn i {
+  font-size: 16px;
+  color: #999; /* gris cuando no está activo */
+  transition: all 0.2s ease;
+}
+
+.fav-btn.active i {
+  color: #6c3bff;
 }
 
 .fav-btn:hover {
@@ -1621,8 +1644,6 @@ section h3 {
 }
 
 /* 🔥 ACTIVO UNIFICADO */
-
-
 .favorite-btn.active i {
   color: #6c3bff;
 }

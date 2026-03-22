@@ -29,7 +29,15 @@
         <span class="benefit-tag">Compra</span>
       </div>
 
-      <button class="fav-btn" title="Guardar producto">♡</button>
+      <button
+        class="fav-btn {% if product._id in favoritos %}active{% endif %}"
+        title="Guardar producto"
+        data-id="{{ product._id }}"
+        data-type="affiliate_product"
+        onclick="toggleFavorite(event, this)"
+      >
+        <i class="{% if product._id in favoritos %}fa-solid fa-heart{% else %}fa-regular fa-heart{% endif %}"></i>
+      </button>
     </div>
 
   </div>

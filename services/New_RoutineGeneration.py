@@ -57,22 +57,30 @@ BODY_PART_TO_PATTERN = {
     "espalda": "pull_upper",
     "hombros": "push_upper",
     "biceps": "arm_flexion",
+    "bíceps": "arm_flexion",
     "triceps": "arm_extension",
+    "tríceps": "arm_extension",
     "antebrazos": "arm_flexion",
+    "brazos": "arm_flexion",  # o tratarlo como accessory_upper
     "cuadriceps": "knee_dominant",
+    "cuádriceps": "knee_dominant",
+    "parte superior de las piernas": "knee_dominant",
     "gluteos": "hip_dominant",
     "glúteos": "hip_dominant",
     "isquiotibiales": "hip_dominant",
     "femoral": "hip_dominant",
     "pantorrillas": "calves",
     "gemelos": "calves",
+    "parte inferior de las piernas": "calves",
     "core": "core",
     "abdomen": "core",
     "core/abdomen": "core",
     "lumbar": "core",
+    "cintura": "core",
     "aductores": "lower_accessory",
     "abductores": "lower_accessory",
     "movilidad": "mobility",
+    "cardio": "conditioning",
 }
 
 FULL_BODY_PRIMARY_PARTS = {
@@ -86,6 +94,57 @@ PATTERN_SET_TARGETS_HYPERTROPHY = {
     "pull_upper": (8, 14),
 }
 
+# =====================================================
+# FILTROS DE CALIDAD PARA HIPERTROFIA
+# =====================================================
+
+NON_PRIMARY_HYPERTROPHY_KEYWORDS = [
+    "balón", "balon", "bosu", "medicinal",
+    "asistido", "asistida",
+    "de rodillas",
+    "arrancada", "snatch",
+    "high pull", "tirón de arrancada", "tiron de arrancada",
+    "encogimiento", "shrug",
+    "pullover",
+    "caminar", "caminata", "cinta", "elíptica", "eliptica",
+    "step", "aeróbico", "aerobico",
+    "inestable", "equilibrio"
+]
+
+# Ejercicios que pueden servir, pero no deberían dominar slots principales
+SECONDARY_HYPERTROPHY_KEYWORDS = [
+    "flexiones", "push up", "push-up",
+    "unilateral", "a un brazo", "a una mano",
+    "fraccionada",
+    "smith",
+    "kettlebell",
+    "mancuernas"
+]
+
+# Ejercicios base/gold standard para hipertrofia
+PRIMARY_HYPERTROPHY_KEYWORDS = [
+    "sentadilla", "squat",
+    "prensa", "leg press",
+    "peso muerto", "deadlift",
+    "hip thrust",
+    "zancada", "estocada", "lunge",
+    "press de banca", "bench press",
+    "press inclinado", "inclinado con mancuernas",
+    "press militar", "shoulder press", "overhead press",
+    "remo", "row",
+    "jalón", "jalon", "lat pulldown",
+    "dominada", "pull-up", "pull up"
+]
+
+# Ejercicios demasiado técnicos para ser base general de hipertrofia
+HIGH_SKILL_KEYWORDS = [
+    "arrancada", "snatch",
+    "clean", "cargada",
+    "jerk",
+    "overhead squat",
+    "sentadilla overhead",
+    "tirón de arrancada", "tiron de arrancada"
+]
 
 # =====================================================
 # MOTOR DINÁMICO
@@ -123,11 +182,11 @@ class RoutineEngineDynamic:
 
     def normalize_level(self, level):
         level = self.normalize_text(level)
-        if level in ("principiante", "beginner", "novato"):
+        if level in ("principiante", "beginner", "novato", "bajo"):
             return "principiante"
         if level in ("medio", "intermedio", "intermediate"):
             return "medio"
-        if level in ("avanzado", "advanced"):
+        if level in ("avanzado", "advanced", "alto"):
             return "avanzado"
         return "medio"
 
@@ -162,23 +221,50 @@ class RoutineEngineDynamic:
     def infer_compound(self, exercise):
         ex_type = self.normalize_exercise_type(exercise)
         pattern = self.infer_pattern(exercise)
-        body_part = self.normalize_bodypart(exercise)
         name = self.normalize_text(exercise.get("name", ""))
 
+        # Nunca compuestos
         if ex_type in ("movilidad", "cardio", "equilibrio", "core/abdomen", "core"):
             return False
 
-        compound_keywords = [
-            "sentadilla", "squat", "press", "remo", "row", "peso muerto",
-            "deadlift", "zancada", "lunge", "dominada", "pull up", "pull-up",
-            "jalon", "jalón", "lat pulldown", "hip thrust", "prensa", "bench"
+        isolation_keywords = [
+            "mosca", "fly", "apertura", "cruz",
+            "elevación frontal", "elevacion frontal",
+            "elevación lateral", "elevacion lateral",
+            "pájaro", "pajaro", "rear delt",
+            "encogimiento", "shrug",
+            "curl", "bíceps", "biceps",
+            "extensión de tríceps", "extension de triceps",
+            "patada de tríceps", "patada de triceps", "kickback",
+            "pantorrilla", "gemelo", "calf",
+            "antebrazo", "muñeca", "muneca",
+            "pullover",
         ]
+
+        # Si parece accesorio/aislamiento, no debe entrar como compuesto
+        if any(k in name for k in isolation_keywords):
+            return False
+
+        compound_keywords = [
+            "sentadilla", "squat",
+            "peso muerto", "deadlift",
+            "prensa", "leg press",
+            "zancada", "estocada", "lunge", "split squat",
+            "hip thrust", "puente de glúteo", "puente de gluteo",
+            "press de banca", "bench press",
+            "press militar", "shoulder press", "overhead press",
+            "remo", "row",
+            "dominada", "pull-up", "pull up",
+            "jalón", "jalon", "lat pulldown",
+            "push up", "push-up", "flexiones",
+        ]
+
         if any(k in name for k in compound_keywords):
             return True
 
-        if pattern in ("push_upper", "pull_upper", "knee_dominant", "hip_dominant"):
-            if body_part not in ("biceps", "triceps", "pantorrillas", "gemelos", "antebrazos"):
-                return True
+        # Patrones de tren inferior casi siempre compuestos
+        if pattern in ("knee_dominant", "hip_dominant"):
+            return True
 
         return False
 
@@ -194,18 +280,98 @@ class RoutineEngineDynamic:
     def get_exercise_slot(self, exercise):
         pattern = self.infer_pattern(exercise)
         is_compound = self.infer_compound(exercise)
+        name = self.normalize_text(exercise.get("name", ""))
 
         if is_compound and pattern in ("knee_dominant", "hip_dominant"):
             return "lower_compound"
+
+        # Solo presses/flexiones reales como empuje superior principal
         if is_compound and pattern == "push_upper":
-            return "upper_push_compound"
+            push_keywords = [
+                "press", "bench press",
+                "press de banca", "press militar",
+                "shoulder press", "overhead press",
+                "push up", "push-up", "flexiones",
+                "fondos", "dip"
+            ]
+            if any(k in name for k in push_keywords):
+                return "upper_push_compound"
+
+        # Solo remos/jalones/dominadas reales como tirón superior principal
         if is_compound and pattern == "pull_upper":
-            return "upper_pull_compound"
+            pull_keywords = [
+                "remo", "row",
+                "dominada", "pull-up", "pull up",
+                "jalón", "jalon", "lat pulldown",
+                "chin-up", "chin up"
+            ]
+            if any(k in name for k in pull_keywords):
+                return "upper_pull_compound"
+
         if self.is_core_exercise(exercise):
             return "core"
+
         if self.is_mobility_exercise(exercise):
             return "mobility"
+
         return "isolation"
+
+    def apply_hypertrophy_quality_filter(self, exercise, goal, day_type, slot=None):
+
+        if goal != "ganar_musculo" or day_type != "focus":
+            return 1.0
+
+        name = self.normalize_text(exercise.get("name", ""))
+        pattern = self.infer_pattern(exercise)
+        is_compound = self.infer_compound(exercise)
+
+        multiplier = 1.0
+
+        # -------------------------------------------------
+        # 1) Penalizar ejercicios poco ideales como base
+        # -------------------------------------------------
+        if any(k in name for k in NON_PRIMARY_HYPERTROPHY_KEYWORDS):
+            multiplier *= 0.45
+
+        # -------------------------------------------------
+        # 2) Penalizar ejercicios demasiado técnicos
+        # -------------------------------------------------
+        if any(k in name for k in HIGH_SKILL_KEYWORDS):
+            multiplier *= 0.35
+
+        # -------------------------------------------------
+        # 3) Dar leve premio a ejercicios muy buenos
+        # -------------------------------------------------
+        if any(k in name for k in PRIMARY_HYPERTROPHY_KEYWORDS):
+            multiplier *= 1.35
+
+        # -------------------------------------------------
+        # 4) Ejercicios "aceptables" pero no ideales
+        # -------------------------------------------------
+        if any(k in name for k in SECONDARY_HYPERTROPHY_KEYWORDS):
+            multiplier *= 0.90
+
+        # -------------------------------------------------
+        # 5) Penalizar ciertos patrones si entran como principales
+        # -------------------------------------------------
+        if slot in ("upper_push_compound", "upper_pull_compound", "lower_compound"):
+            # Si no es compuesto real, no debería dominar el slot
+            if not is_compound:
+                multiplier *= 0.30
+
+        # -------------------------------------------------
+        # 6) Penalizar pantorrilla como accesorio final frecuente
+        # -------------------------------------------------
+        if slot == "isolation" and pattern == "calves":
+            multiplier *= 0.55
+
+        # -------------------------------------------------
+        # 7) Core en focus: permitido, pero no como preferido
+        # -------------------------------------------------
+        if self.is_core_exercise(exercise):
+            multiplier *= 0.75
+
+        return max(multiplier, 0.1)
 
     # =====================================================
     # COMPATIBILIDAD CON PERFIL
@@ -328,6 +494,15 @@ class RoutineEngineDynamic:
         pattern = self.infer_pattern(exercise)
         is_compound = self.infer_compound(exercise)
 
+        slot = self.get_exercise_slot(exercise)
+        quality_multiplier = self.apply_hypertrophy_quality_filter(
+            exercise=exercise,
+            goal=goal,
+            day_type=day_type,
+            slot=slot
+        )
+        score *= quality_multiplier
+
         # Evitar movilidad y cardio en días focus de hipertrofia
         if goal == "ganar_musculo" and day_type == "focus":
             if self.is_mobility_exercise(exercise) or self.is_cardio_like(exercise):
@@ -345,15 +520,19 @@ class RoutineEngineDynamic:
                 else:
                     score *= 0.8
 
+
             elif day_type == "compensation":
+
                 if self.is_mobility_exercise(exercise):
-                    score *= 2.0
+                    score *= 2.2
                 elif self.is_core_exercise(exercise):
-                    score *= 1.8
+                    score *= 2.0
+                elif pattern in ("arm_flexion", "arm_extension", "calves"):
+                    score *= 1.2
                 elif not is_compound:
-                    score *= 1.3
+                    score *= 1.1
                 else:
-                    score *= 0.9
+                    score *= 0.65
 
             elif day_type == "metabolic":
                 if self.is_cardio_like(exercise):
@@ -602,12 +781,27 @@ class RoutineEngineDynamic:
                 candidates = [
                     e for e in candidates
                     if self.get_exercise_slot(e) == "isolation"
-                    and not self.is_mobility_exercise(e)
-                    and not self.is_cardio_like(e)
+                       and not self.is_mobility_exercise(e)
+                       and not self.is_cardio_like(e)
                 ]
 
-            if not candidates:
-                continue
+                # Penalizar accesorios raros en días principales
+                cleaned = []
+                for e in candidates:
+                    name = self.normalize_text(e.get("name", ""))
+                    if any(k in name for k in NON_PRIMARY_HYPERTROPHY_KEYWORDS):
+                        continue
+                    cleaned.append(e)
+
+                if cleaned:
+                    candidates = cleaned
+
+                preferred_patterns = {"arm_flexion", "arm_extension", "core"}
+                preferred = [e for e in candidates if self.infer_pattern(e) in preferred_patterns]
+
+                if preferred:
+                    candidates = preferred
+
 
             weights = [
                 self.score_exercise(e, "ganar_musculo", "focus", bodyparts_today, patterns_today)
