@@ -29,7 +29,7 @@ load_dotenv()
 # SERVICES IMPORTS
 # ---------------------------------------------------------
 
-from services.redeem_service import redeem_benefit
+from services.redeem_service import redeem_benefit, get_popular_benefits, get_benefit_ids
 from services.recent_benefits import get_recent_benefits
 from services.benefits_service import get_benefits_by_subcategory
 from services.benefit_details import get_benefit_details
@@ -299,7 +299,7 @@ def beneficio_redimir(benefit_id):
     try:
         response = redeem_benefit(user_id,benefit_code[1:])
 
-        if not response or "success" not in response:
+        if not response or "success" not in response:   
             abort(404, description="No fue posible redimir el beneficio")
 
         return render_template(
@@ -332,7 +332,6 @@ def login():
 # ---------------------------------------------------------
 # PRIVATE ROUTES
 # ---------------------------------------------------------
-
 @app.route("/home")
 @require_auth
 def home():
@@ -355,14 +354,18 @@ def home():
     ]
 
     response = get_recent_benefits()
-    recomendados = response.get("data", []) if isinstance(response, dict) else []
+    recientes = response.get("data", []) if isinstance(response, dict) else []
+
+    popular_ids = get_popular_benefits()
+    populares = get_benefit_ids(popular_ids)
+    print(f"Beneficios Populares: {populares}")
 
     return render_template(
         "home.html",
         favoritos=favorite_ids,
-        recomendados=recomendados
+        recomendados=recientes,
+        populares=populares
     )
-
 
 @app.route("/survey", methods=["GET", "POST"])
 @require_auth

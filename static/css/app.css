@@ -121,6 +121,23 @@ body {
   padding: 20px;
 }
 
+.home-section {
+
+    padding-left: 24px;
+    padding-right: 24px;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+}
+
+.home-title {
+
+    margin-bottom: 12px;
+    margin-left: 4px;
+
+}
+
 /* ================= SECCIONES ================= */
 
 section {

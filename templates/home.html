@@ -8,55 +8,80 @@
   <div class="intent-track" id="intentTrack">
 
     <a href="/mis-rutinas" class="intent-card active">
-      <img src="/static/img/ejercicio.jpeg" alt="mis-rutinas">
+      <img src="/static/img/ejercicio.jpeg">
       <span>Mis Rutinas de Ejercicio</span>
     </a>
 
     <a href="/intent/alimentacion" class="intent-card">
-      <img src="/static/img/alimentacion.jpeg" alt="Alimentación">
+      <img src="/static/img/alimentacion.jpeg">
       <span>Mis Planes de Alimentación</span>
     </a>
 
     <a href="/intent/diversion" class="intent-card">
-      <img src="/static/img/planes.jpeg" alt="Diversión">
+      <img src="/static/img/planes.jpeg">
       <span>Un Poco de Diversión</span>
     </a>
 
     <a href="/intent/restaurantes" class="intent-card">
-      <img src="/static/img/familia.jpeg" alt="Familia">
+      <img src="/static/img/familia.jpeg">
       <span>Salir a Comer</span>
     </a>
 
     <a href="/intent/mascotas" class="intent-card">
-      <img src="/static/img/mascotas.png" alt="Mascotas">
+      <img src="/static/img/mascotas.png">
       <span>Beneficios Mascotas</span>
     </a>
 
     <a href="/intent/cafe" class="intent-card">
-      <img src="/static/img/cafe.png" alt="Cafe">
+      <img src="/static/img/cafe.png">
       <span>Ir por un Café</span>
     </a>
 
     <a href="/intent/wellness" class="intent-card">
-      <img src="/static/img/bienestar.jpeg" alt="Bienestar">
+      <img src="/static/img/bienestar.jpeg">
       <span>Mas bienestar</span>
     </a>
 
     <a href="/intent/viajes" class="intent-card">
-      <img src="/static/img/viajes.png" alt="Bienestar">
+      <img src="/static/img/viajes.png">
       <span>Quiero viajar</span>
     </a>
 
   </div>
 </section>
 
-<section>
-  <h2>Beneficios Recientes</h2>
+
+<!-- ================= POPULARES ================= -->
+
+{% if populares %}
+<div class="home-section">
+
+  <h2 class="home-title">Beneficios Populares</h2>
+
+  <div class="cards">
+    {% for benefit in populares %}
+      {% include "partials/benefit_card.html" %}
+    {% endfor %}
+  </div>
+
+</div>
+{% endif %}
+
+
+
+<!-- ================= RECIENTES ================= -->
+
+<div class="home-section">
+
+  <h2 class="home-title">Beneficios Recientes</h2>
+
   <div class="cards">
     {% for benefit in recomendados %}
       {% include "partials/benefit_card.html" %}
     {% endfor %}
   </div>
-</section>
+
+</div>
+
 
 {% endblock %}
